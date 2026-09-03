@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Krish Patel — Four Questions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Karla:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#15161c; --ink2:#1c1e26; --paper:#f2eee6; --paper-dim:#a9a49a;
+  --quiet:#6d6a64; --rule:#2b2d36; --ochre:#d9a441; --ochre-soft:rgba(217,164,65,.13);
+  --w:960px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--paper);
+  font-family:Karla,system-ui,sans-serif;font-size:16px;line-height:1.72;
+  -webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.srf{font-family:"Instrument Serif",Georgia,serif;font-weight:400}
+.mn{font-family:"JetBrains Mono",monospace}
+.wrap{width:min(var(--w),calc(100% - 44px));margin-inline:auto}
+
+/* ---------- index of questions ---------- */
+.idx{position:sticky;top:0;z-index:30;background:rgba(21,22,28,.93);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--rule)}
+.idx-in{width:min(var(--w),calc(100% - 44px));margin-inline:auto;
+  display:flex;align-items:center;gap:22px;padding:12px 0}
+.idx .me{font-family:"Instrument Serif",serif;font-size:20px;white-space:nowrap}
+.qs{margin-left:auto;display:flex;gap:6px;list-style:none;padding:0}
+.qs button{background:none;border:1px solid transparent;border-radius:999px;padding:4px 12px;
+  font:inherit;font-size:12.5px;color:var(--quiet);cursor:pointer;transition:all .28s;white-space:nowrap}
+.qs button:hover{color:var(--paper-dim)}
+.qs button.on{color:var(--ink);background:var(--ochre);border-color:var(--ochre)}
+.qs button.done{color:var(--paper-dim);border-color:var(--rule)}
+.progress{position:absolute;left:0;bottom:-1px;height:1px;background:var(--ochre);
+  transition:width .55s cubic-bezier(.5,0,.2,1);width:0}
+
+/* ---------- opening ---------- */
+.open{padding:100px 0 84px}
+.eyebrow{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.22em;
+  color:var(--quiet);margin:0 0 26px}
+.open h1{font-family:"Instrument Serif",serif;font-size:clamp(40px,6.2vw,74px);line-height:1.04;
+  letter-spacing:-.015em;margin:0 0 28px;max-width:17ch;text-wrap:balance}
+.open h1 em{font-style:italic;color:var(--ochre)}
+.open p{color:var(--paper-dim);max-width:56ch;font-size:17.5px;margin:0 0 18px}
+.open p b{color:var(--paper);font-weight:500}
+.open-row{display:grid;grid-template-columns:1fr 180px;gap:52px;align-items:end;margin-top:44px}
+.open-row img{width:180px;aspect-ratio:3/4;object-fit:cover;object-position:50% 20%;
+  filter:grayscale(1) contrast(1.03) brightness(1.02)}
+.where{display:grid;gap:11px;font-size:14.5px;color:var(--paper-dim)}
+.where div{display:grid;grid-template-columns:76px 1fr;gap:16px;
+  padding-bottom:11px;border-bottom:1px solid var(--rule)}
+.where b{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.16em;
+  color:var(--quiet);font-weight:400;padding-top:4px}
+
+/* ---------- a question ---------- */
+.q{padding:92px 0;border-top:1px solid var(--rule);scroll-margin-top:62px}
+.q-no{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.22em;
+  color:var(--ochre);margin:0 0 20px}
+.q h2{font-family:"Instrument Serif",serif;font-size:clamp(31px,4.6vw,50px);line-height:1.1;
+  letter-spacing:-.012em;margin:0 0 22px;max-width:19ch;text-wrap:balance}
+.q .setup{color:var(--paper-dim);max-width:58ch;font-size:17px;margin:0 0 44px}
+.answer{display:grid;grid-template-columns:1fr 300px;gap:46px;align-items:start;
+  padding-top:32px;border-top:1px solid var(--rule)}
+.a-label{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.2em;
+  color:var(--quiet);margin:0 0 12px}
+.answer h3{font-family:"Instrument Serif",serif;font-size:26px;margin:0 0 4px;letter-spacing:-.005em}
+.answer .src{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;
+  color:var(--ochre);margin:0 0 16px}
+.answer p{margin:0 0 18px;color:var(--paper-dim);max-width:58ch}
+.answer p em{color:var(--paper);font-style:italic}
+.tags{display:flex;flex-wrap:wrap;gap:7px}
+.tag{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--quiet);
+  border:1px solid var(--rule);border-radius:999px;padding:3px 10px}
+.aside{border-left:1px solid var(--ochre);padding-left:20px}
+.aside figure{margin:0 0 20px}
+.aside svg{display:block;width:100%;height:auto}
+.aside dl{margin:0;display:grid;gap:13px}
+.aside dl>div{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:baseline;
+  padding-bottom:11px;border-bottom:1px solid var(--rule)}
+.aside dt{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.14em;color:var(--quiet)}
+.aside dd{margin:0;font-size:14.5px;font-weight:500;text-align:right}
+.aside dd.ochre{color:var(--ochre)}
+
+/* the important one */
+.q.key h2{max-width:17ch}
+.q.key .answer{border-top:1px solid var(--ochre)}
+.q.key .flagline{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:9.5px;
+  letter-spacing:.2em;color:var(--ink);background:var(--ochre);padding:4px 11px;margin-bottom:15px}
+.pull{font-family:"Instrument Serif",serif;font-style:italic;font-size:23px;line-height:1.42;
+  color:var(--paper);max-width:34ch;margin:30px 0 0;padding-left:20px;border-left:2px solid var(--ochre)}
+
+/* ---------- closing ---------- */
+.close{padding:92px 0 40px;border-top:1px solid var(--rule)}
+.close h2{font-family:"Instrument Serif",serif;font-size:clamp(34px,5vw,54px);
+  margin:0 0 14px;letter-spacing:-.015em;max-width:20ch;text-wrap:balance}
+.close>p{color:var(--paper-dim);max-width:50ch;margin:0 0 34px;font-size:17px}
+.reach{display:grid;gap:1px;background:var(--rule);border-block:1px solid var(--rule)}
+.reach a{background:var(--ink);display:flex;align-items:center;gap:20px;padding:20px 6px;
+  transition:background .22s,padding-left .22s}
+.reach a:hover{background:var(--ink2);padding-left:16px}
+.reach .k{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.2em;
+  color:var(--quiet);width:96px}
+.reach .v{font-size:16px}
+.reach .ar{margin-left:auto;color:var(--quiet);transition:color .22s,transform .22s}
+.reach a:hover .ar{color:var(--ochre);transform:translateX(5px)}
+.foot{padding:28px 0 48px;display:flex;justify-content:space-between;
+  font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--quiet);letter-spacing:.14em}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+@media (max-width:840px){
+  .idx-in{gap:10px}
+  .qs{margin-left:auto;overflow-x:auto}
+  .qs button{font-size:11.5px;padding:4px 9px}
+  .idx .me{font-size:17px}
+  .open{padding:56px 0 46px}
+  .open-row{grid-template-columns:1fr;gap:28px}
+  .open-row img{width:150px;order:-1}
+  .q{padding:60px 0}
+  .answer{grid-template-columns:1fr;gap:28px}
+  .aside{border-left:0;border-top:1px solid var(--ochre);padding:22px 0 0}
+  .pull{font-size:20px}
+}
+</style>
+</head>
+<body>
+
+<div class="idx">
+  <div class="idx-in">
+    <span class="me">Krish Patel</span>
+    <ul class="qs" id="qs">
+      <li><button class="on" data-t="q1">What is it doing?</button></li>
+      <li><button data-t="q2">How does it decide?</button></li>
+      <li><button data-t="q3">Can it be built?</button></li>
+      <li><button data-t="q4">What is it for?</button></li>
+    </ul>
+  </div>
+  <div class="progress" id="progress"></div>
+</div>
+
+<main class="wrap">
+
+  <section class="open">
+    <p class="eyebrow">COMPUTER ENGINEER · CARNEGIE MELLON</p>
+    <h1>I've spent four years on <em>four questions</em> about computers.</h1>
+    <p>None of them are answerable by reading. Each one turned into something I had to build — an operating system, a processor, a chip layout, a compiler — and <b>each one is on this page.</b></p>
+    <div class="open-row">
+      <div class="where">
+        <div><b>NOW</b><span>M.S. Electrical &amp; Computer Engineering, Carnegie Mellon University</span></div>
+        <div><b>BEFORE</b><span>B.S. Computer Engineering, University of Illinois Urbana-Champaign</span></div>
+        <div><b>NEXT</b><span>Looking for 2027 internships in architecture, verification, and hardware for AI</span></div>
+      </div>
+      <img src="https://static.wixstatic.com/media/843f1e_69efc195f84f4fa6b0341ea2a1d163ef~mv2.jpg/v1/crop/x_611,y_0,w_1133,h_1640/fill/w_560,h_810,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/krish_patel_edited.jpg" alt="Krish Patel" />
+    </div>
+  </section>
+
+  <section class="q" id="q1">
+    <p class="q-no">QUESTION ONE</p>
+    <h2>What is a computer actually doing when it runs your program?</h2>
+    <p class="setup">Underneath everything you write, something has to hand out memory, notice that you pressed a key, and choose which program gets the processor next. You can use a computer your whole life without ever seeing that layer. I wanted to see it, so I wrote it.</p>
+    <div class="answer">
+      <div>
+        <p class="a-label">ANSWERED BY</p>
+        <h3>An operating system, written from an empty file</h3>
+        <p class="src">ECE 391 · 2024</p>
+        <p>Memory paging, a keyboard driver that wakes on interrupts, a working file system, and a scheduler that keeps three terminals running at once — <em>each one convinced it has the whole machine to itself.</em> C and assembly, debugged one breakpoint at a time.</p>
+        <div class="tags"><span class="tag">C</span><span class="tag">x86 Assembly</span><span class="tag">QEMU</span><span class="tag">GDB</span></div>
+      </div>
+      <div class="aside">
+        <figure>
+          <svg viewBox="0 0 280 88" role="img" aria-label="Three terminals sharing one kernel">
+            <g stroke="#3a3d47" stroke-width="1" fill="none">
+              <rect x="10" y="8" width="260" height="18"/><rect x="10" y="26" width="260" height="18"/><rect x="10" y="44" width="260" height="18"/>
+            </g>
+            <rect x="10" y="62" width="260" height="20" fill="rgba(217,164,65,.13)" stroke="#d9a441" stroke-width=".9"/>
+            <g font-family="JetBrains Mono, monospace" font-size="8" fill="#f2eee6">
+              <text x="20" y="21">TERMINAL 3</text><text x="20" y="39">TERMINAL 2</text><text x="20" y="57">TERMINAL 1</text>
+              <text x="20" y="76" fill="#d9a441">KERNEL — chooses who runs next</text>
+            </g>
+          </svg>
+        </figure>
+        <dl>
+          <div><dt>TERMINALS</dt><dd class="ochre">3 at once</dd></div>
+          <div><dt>SCHEDULER</dt><dd>Round-robin</dd></div>
+          <div><dt>MEMORY</dt><dd>Paged</dd></div>
+          <div><dt>WRITTEN IN</dt><dd>C + assembly</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="q key" id="q2">
+    <p class="q-no">QUESTION TWO · THE ONE I KEEP COMING BACK TO</p>
+    <h2>How does a machine decide what to do next?</h2>
+    <p class="setup">A processor is handed a list of instructions and has to get through it as fast as physically possible. The obvious approach — do them one at a time, in order — is also the slowest, because the machine spends most of its life waiting. Every interesting idea in computer architecture is a different answer to "what could we be doing instead of waiting?"</p>
+    <div class="answer">
+      <div>
+        <span class="flagline">THE MAIN THING I BUILT</span>
+        <h3>A processor that runs ahead of itself</h3>
+        <p class="src">ECE 411 · SYSTEMVERILOG</p>
+        <p>When an instruction stalls, this one scans further down the list, finds work that <em>is</em> ready, and does that instead — then quietly puts every result back in the correct order before anything downstream can tell. It also guesses which way each branch will go, and when it guesses wrong it unwinds the mistake early rather than paying full price for it.</p>
+        <p>I measured it on CoreMark and a test suite I wrote by hand. The hard part was never making it fast. The hard part was proving it was still <em>correct</em> while doing all of that out of order.</p>
+        <div class="tags"><span class="tag">SystemVerilog</span><span class="tag">VCS</span><span class="tag">Verdi</span><span class="tag">Verilator</span><span class="tag">CoreMark</span></div>
+        <p class="pull">A processor is mostly an elaborate argument about what to do while you wait.</p>
+      </div>
+      <div class="aside">
+        <figure>
+          <svg viewBox="0 0 280 112" role="img" aria-label="Work done out of order then restored to order">
+            <defs><marker id="f1" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0 0l6 3-6 3z" fill="#d9a441"/></marker></defs>
+            <g fill="none" stroke="#3a3d47" stroke-width="1">
+              <rect x="4" y="42" width="48" height="28" rx="2"/>
+              <rect x="84" y="8" width="58" height="24" rx="2"/><rect x="84" y="44" width="58" height="24" rx="2"/><rect x="84" y="80" width="58" height="24" rx="2"/>
+              <rect x="228" y="42" width="48" height="28" rx="2"/>
+            </g>
+            <rect x="172" y="32" width="40" height="48" rx="2" fill="rgba(217,164,65,.13)" stroke="#d9a441" stroke-width=".9"/>
+            <g stroke="#d9a441" stroke-width="1" marker-end="url(#f1)" opacity=".9">
+              <path d="M52 56h26"/><path d="M142 20h16v34h6"/><path d="M142 56h22"/><path d="M142 92h16V58h6"/><path d="M212 56h10"/>
+            </g>
+            <g font-family="JetBrains Mono, monospace" font-size="7.5" fill="#f2eee6" text-anchor="middle">
+              <text x="28" y="59">READ IN</text>
+              <text x="113" y="23">TASK A</text><text x="113" y="59">TASK B</text><text x="113" y="95">TASK C</text>
+              <text x="192" y="59" fill="#d9a441">REORDER</text><text x="252" y="59">IN ORDER</text>
+            </g>
+            <text x="113" y="110" font-family="JetBrains Mono, monospace" font-size="7" fill="#6d6a64" text-anchor="middle">whichever is ready — not whichever is first</text>
+          </svg>
+        </figure>
+        <dl>
+          <div><dt>EXECUTES</dt><dd class="ochre">Out of order</dd></div>
+          <div><dt>PREDICTS</dt><dd>Branches</dd></div>
+          <div><dt>CACHE</dt><dd>4-way</dd></div>
+          <div><dt>PROVEN ON</dt><dd>CoreMark</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="answer" style="margin-top:38px">
+      <div>
+        <p class="a-label">AND THEN</p>
+        <h3>I spent a semester teaching it</h3>
+        <p class="src">TEACHING ASSISTANT · ECE 411 · SPRING 2025</p>
+        <p>Walking student teams through building their own processors — reading their designs, arguing about how you prove one correct, and explaining the same subtle failure ten different ways until one version landed. <em>Still the fastest way I know to actually understand something.</em></p>
+        <div class="tags"><span class="tag">Mentoring</span><span class="tag">Verification</span><span class="tag">Debugging</span></div>
+      </div>
+      <div></div>
+    </div>
+  </section>
+
+  <section class="q" id="q3">
+    <p class="q-no">QUESTION THREE</p>
+    <h2>Could this design survive contact with the physical world?</h2>
+    <p class="setup">A design that only runs in simulation is an argument, not a machine. At some point it has to become an arrangement of physical cells on a piece of silicon, with wires whose length costs you time you can never get back — and that is where you find out what your clever idea actually costs.</p>
+    <div class="answer">
+      <div>
+        <p class="a-label">ANSWERED BY</p>
+        <h3>Taking a datapath all the way to layout</h3>
+        <p class="src">FULL CHIP DESIGN FLOW · 2025</p>
+        <p>I carried a custom datapath through every stage — from a description of what it should do, to the physical arrangement of cells on a die, to the wires connecting them — then tuned it until it ran fast enough and passed the checks that decide whether something <em>can actually be manufactured.</em></p>
+        <div class="tags"><span class="tag">Design Compiler</span><span class="tag">ICC2</span><span class="tag">PrimeTime</span><span class="tag">DRC / LVS</span></div>
+      </div>
+      <div class="aside">
+        <figure>
+          <svg viewBox="0 0 280 88" role="img" aria-label="Blocks arranged on a die">
+            <rect x="4" y="8" width="272" height="72" fill="none" stroke="#3a3d47"/>
+            <g fill="rgba(217,164,65,.13)" stroke="#d9a441" stroke-width=".85">
+              <rect x="16" y="20" width="60" height="22"/><rect x="16" y="48" width="60" height="20"/>
+              <rect x="86" y="20" width="76" height="48"/><rect x="172" y="20" width="46" height="48"/>
+              <rect x="228" y="20" width="36" height="22"/><rect x="228" y="48" width="36" height="20"/>
+            </g>
+            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#f2eee6" text-anchor="middle">
+              <text x="46" y="34">MATH</text><text x="46" y="61">SHIFT</text><text x="124" y="47">REGISTERS</text>
+              <text x="195" y="47">CONTROL</text><text x="246" y="34">MUX</text><text x="246" y="61">I/O</text>
+            </g>
+          </svg>
+        </figure>
+        <dl>
+          <div><dt>FLOW</dt><dd class="ochre">Design → layout</dd></div>
+          <div><dt>TIMING</dt><dd>Closed</dd></div>
+          <div><dt>CHECKS</dt><dd>DRC · LVS</dd></div>
+          <div><dt>ANALYSIS</dt><dd>Power</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="q" id="q4">
+    <p class="q-no">QUESTION FOUR</p>
+    <h2>And what should we be building all of it for?</h2>
+    <p class="setup">A faster machine is only worth having if something worthwhile runs on it. Increasingly that something is machine learning — which is unusually sensitive to the hardware underneath it, and therefore the most interesting thing to design against.</p>
+    <div class="answer">
+      <div>
+        <p class="a-label">ANSWERED BY</p>
+        <h3>Teaching a compiler to search smarter</h3>
+        <p class="src">IBM-ILLINOIS DISCOVERY ACCELERATOR · 2024–2025</p>
+        <p>A machine-learning compiler has to decide how to map a calculation onto real hardware, and there are astronomically many ways to do it. I used language-model techniques to throw out the bad options early, then rebuilt the aging pipeline on a modern framework and <em>proved the new one agreed with the old to within two percent.</em></p>
+        <div class="tags"><span class="tag">TVM</span><span class="tag">Python</span><span class="tag">NLP</span><span class="tag">Autotuning</span></div>
+      </div>
+      <div class="aside">
+        <figure>
+          <svg viewBox="0 0 280 88" role="img" aria-label="A large search space reduced to a small one">
+            <rect x="8" y="14" width="104" height="60" fill="rgba(217,164,65,.13)" stroke="#3a3d47" stroke-width="1"/>
+            <rect x="182" y="34" width="42" height="20" fill="#d9a441"/>
+            <path d="M122 44h44" stroke="#a9a49a" stroke-width="1"/><path d="M162 40l7 4-7 4z" fill="#a9a49a"/>
+            <g font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle">
+              <text x="60" y="47" fill="#f2eee6">EVERY OPTION</text><text x="203" y="47" fill="#15161c">KEPT</text>
+              <text x="250" y="47" fill="#a9a49a">±2%</text>
+            </g>
+          </svg>
+        </figure>
+        <dl>
+          <div><dt>FRAMEWORK</dt><dd>TVM</dd></div>
+          <div><dt>AGREEMENT</dt><dd class="ochre">&lt; 2%</dd></div>
+          <div><dt>METHOD</dt><dd>NLP pruning</dd></div>
+          <div><dt>LENGTH</dt><dd>12 months</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="close">
+    <h2>Those are my four. I'd like to hear yours.</h2>
+    <p>Looking for 2027 internships in computer architecture, verification, and hardware for AI.</p>
+    <div class="reach">
+      <a href="mailto:krishp2@andrew.cmu.edu"><span class="k">EMAIL</span><span class="v">krishp2@andrew.cmu.edu</span><span class="ar">→</span></a>
+      <a href="https://github.com/krishp2"><span class="k">GITHUB</span><span class="v">github.com/krishp2</span><span class="ar">→</span></a>
+      <a href="https://www.linkedin.com/in/krish-patel-24bb79238/"><span class="k">LINKEDIN</span><span class="v">in/krish-patel</span><span class="ar">→</span></a>
+    </div>
+    <div class="foot"><span>© 2026 KRISH PATEL</span><span>HAND-CODED</span></div>
+  </section>
+</main>
+
+<script>
+// Interactive feature: the question index tracks which question you are reading,
+// marks the ones already answered, fills a progress hairline, and jumps when clicked.
+const buttons = [...document.querySelectorAll('#qs button')];
+const sections = buttons.map((b) => document.getElementById(b.dataset.t));
+const progress = document.getElementById('progress');
+
+buttons.forEach((button) => {
+  button.addEventListener('click', () => {
+    document.getElementById(button.dataset.t).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+function mark(i) {
+  buttons.forEach((b, n) => {
+    b.classList.toggle('on', n === i);
+    b.classList.toggle('done', n < i);
+  });
+  progress.style.width = ((i + 1) / buttons.length) * 100 + '%';
+}
+
+let at = -1;
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    const i = sections.indexOf(entry.target);
+    if (i !== -1 && i !== at) { at = i; mark(i); }
+  });
+}, { rootMargin: '-35% 0px -58% 0px', threshold: 0 });
+
+sections.forEach((s) => io.observe(s));
+mark(0);
+</script>
+</body>
+</html>

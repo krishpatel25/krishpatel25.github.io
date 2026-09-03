@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KP-2026 Datasheet | Krish Patel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f1f1ee; --ink:#14161a; --mid:#5c6270; --rule:#c6c6bf;
+  --hair:#dfdfd9; --accent:#1a5fd4; --live:#0f8a5f; --warn:#c2410c;
+  --w:1080px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:14px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  background-image:linear-gradient(var(--hair) 1px,transparent 1px),linear-gradient(90deg,var(--hair) 1px,transparent 1px);
+  background-size:28px 28px;background-position:-1px -1px}
+.sheet{width:min(var(--w),calc(100% - 32px));margin:24px auto 60px;background:var(--paper);
+  border:1.5px solid var(--ink);box-shadow:0 1px 0 var(--rule),0 18px 40px -30px rgba(0,0,0,.5)}
+mono,.mono,code{font-family:"IBM Plex Mono",monospace}
+
+/* ---------- title block ---------- */
+.titleblock{display:grid;grid-template-columns:1fr 300px;border-bottom:1.5px solid var(--ink)}
+.tb-left{padding:26px 28px 22px}
+.part{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;color:var(--mid)}
+h1{margin:6px 0 2px;font-size:40px;line-height:1;letter-spacing:-.02em;font-weight:700}
+.subtitle{font-size:15px;color:var(--mid);margin:0 0 16px}
+.badges{display:flex;flex-wrap:wrap;gap:6px}
+.badge{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;
+  border:1px solid var(--rule);padding:3px 8px;background:#fff}
+.badge.live{border-color:var(--live);color:var(--live)}
+.badge.live::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;
+  background:var(--live);margin-right:6px;vertical-align:1px;animation:blink 2s infinite}
+@keyframes blink{0%,60%{opacity:1}80%{opacity:.25}100%{opacity:1}}
+.tb-right{border-left:1.5px solid var(--ink);display:grid;grid-template-rows:1fr auto}
+.portrait{width:100%;height:100%;object-fit:cover;object-position:50% 22%;filter:grayscale(1) contrast(1.06)}
+.tb-meta{border-top:1px solid var(--rule);display:grid;grid-template-columns:1fr 1fr;
+  font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.05em}
+.tb-meta div{padding:7px 10px}
+.tb-meta div+div{border-left:1px solid var(--rule)}
+.tb-meta b{display:block;color:var(--mid);font-weight:500;font-size:9px;margin-bottom:1px}
+
+/* ---------- generic section ---------- */
+section{border-bottom:1px solid var(--rule)}
+.shead{display:flex;align-items:baseline;gap:12px;padding:10px 28px;
+  border-bottom:1px solid var(--rule);background:#e9e9e4}
+.snum{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--accent);font-weight:600}
+.shead h2{margin:0;font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:600}
+.shead .hint{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--mid)}
+.pad{padding:22px 28px}
+
+/* ---------- features + ratings ---------- */
+.two{display:grid;grid-template-columns:1.15fr 1fr}
+.two>div{padding:22px 28px}
+.two>div+div{border-left:1px solid var(--rule)}
+.caps{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;color:var(--mid);margin:0 0 12px}
+ul.feat{margin:0;padding:0;list-style:none}
+ul.feat li{position:relative;padding-left:18px;margin-bottom:9px;font-size:13.5px}
+ul.feat li::before{content:"▸";position:absolute;left:0;color:var(--accent);font-size:11px;top:1px}
+table.spec{width:100%;border-collapse:collapse;font-size:12.5px}
+table.spec td{padding:7px 0;border-bottom:1px dotted var(--rule);vertical-align:top}
+table.spec td:first-child{color:var(--mid);width:44%;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.03em}
+table.spec tr:last-child td{border-bottom:0}
+.edu{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.edu img{width:26px;height:26px;object-fit:contain;filter:grayscale(1)}
+.edu span{font-size:12.5px;line-height:1.35}
+.edu small{color:var(--mid);font-size:11px}
+
+/* ---------- block diagram ---------- */
+.bd{padding:26px 28px 30px}
+.bd-note{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--mid);margin:0 0 16px}
+.blocks{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1.5px solid var(--ink);background:#fff}
+.blk{padding:18px 14px;text-align:left;background:#fff;border:0;border-right:1px solid var(--rule);
+  font:inherit;cursor:pointer;position:relative;transition:background .16s}
+.blk:last-child{border-right:0}
+.blk:hover{background:#eef3fd}
+.blk[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.blk[aria-pressed="true"] .blk-id{color:#7fb0ff}
+.blk[aria-pressed="true"] .blk-sub{color:#a9b0bd}
+.blk-id{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;color:var(--accent);display:block;margin-bottom:6px}
+.blk-name{font-weight:600;font-size:13.5px;display:block;line-height:1.25}
+.blk-sub{font-size:11px;color:var(--mid);display:block;margin-top:5px}
+.bus{height:26px;position:relative;margin-top:-1px}
+.bus::before{content:"";position:absolute;left:12.5%;right:12.5%;top:12px;border-top:1px dashed var(--mid)}
+.bus span{position:absolute;left:50%;top:2px;transform:translateX(-50%);background:var(--paper);
+  padding:0 8px;font-family:"IBM Plex Mono",monospace;font-size:9.5px;color:var(--mid);letter-spacing:.1em}
+
+/* ---------- projects ---------- */
+.proj{border-top:1px solid var(--rule);display:grid;grid-template-columns:56px 1fr 300px;
+  transition:opacity .2s}
+.proj.dim{opacity:.24}
+.proj-idx{border-right:1px solid var(--rule);padding:20px 0;text-align:center;
+  font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--mid);background:#e9e9e4}
+.proj-main{padding:20px 24px}
+.proj-main h3{margin:0 0 3px;font-size:19px;letter-spacing:-.01em}
+.tagline{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.08em;color:var(--accent);margin:0 0 10px}
+.proj-main p{margin:0 0 12px;color:#2c313a;max-width:56ch}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-family:"IBM Plex Mono",monospace;font-size:10px;border:1px solid var(--rule);
+  background:#fff;padding:2px 7px;color:var(--mid)}
+.proj-side{border-left:1px solid var(--rule);padding:20px 22px;background:#eceCe7}
+.proj-side .caps{margin-bottom:9px}
+.mtable{width:100%;border-collapse:collapse;font-family:"IBM Plex Mono",monospace;font-size:11px}
+.mtable td{padding:5px 0;border-bottom:1px dotted var(--rule)}
+.mtable td:last-child{text-align:right;font-weight:600}
+.mtable tr:last-child td{border-bottom:0}
+figure.dia{margin:0 0 12px;border:1px solid var(--rule);background:#fff;padding:10px}
+figure.dia svg{display:block;width:100%;height:auto}
+
+/* ---------- revision history ---------- */
+.rev{width:100%;border-collapse:collapse;font-size:13px}
+.rev th{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;color:var(--mid);
+  text-align:left;font-weight:500;padding:0 14px 8px 0;border-bottom:1px solid var(--rule)}
+.rev td{padding:13px 14px 13px 0;border-bottom:1px dotted var(--rule);vertical-align:top}
+.rev td:first-child{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--mid);white-space:nowrap;width:130px}
+.rev td:nth-child(2){font-weight:600;width:210px}
+.rev td:last-child{color:#2c313a}
+
+/* ---------- pinout / contact ---------- */
+.pinout{display:grid;grid-template-columns:repeat(3,1fr);border:1.5px solid var(--ink);background:#fff}
+.pin{padding:18px 16px;border-right:1px solid var(--rule);display:block;color:inherit;text-decoration:none;
+  transition:background .16s}
+.pin:last-child{border-right:0}
+.pin:hover{background:#eef3fd}
+.pin-n{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--accent);letter-spacing:.1em}
+.pin-l{display:block;font-weight:600;margin:6px 0 2px;font-size:14px}
+.pin-v{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--mid);word-break:break-all}
+footer{padding:14px 28px;display:flex;justify-content:space-between;
+  font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--mid);letter-spacing:.05em}
+
+@media (max-width:860px){
+  .titleblock{grid-template-columns:1fr}
+  .tb-right{border-left:0;border-top:1.5px solid var(--ink);grid-template-rows:220px auto}
+  .two{grid-template-columns:1fr}.two>div+div{border-left:0;border-top:1px solid var(--rule)}
+  .blocks{grid-template-columns:1fr 1fr}
+  .blk:nth-child(2){border-right:0}.blk:nth-child(-n+2){border-bottom:1px solid var(--rule)}
+  .proj{grid-template-columns:40px 1fr}
+  .proj-side{grid-column:1/-1;border-left:0;border-top:1px solid var(--rule)}
+  .pinout{grid-template-columns:1fr}
+  .pin{border-right:0;border-bottom:1px solid var(--rule)}
+  h1{font-size:31px}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="titleblock">
+    <div class="tb-left">
+      <div class="part">PART NO. KP-2026 &nbsp;·&nbsp; REV. C &nbsp;·&nbsp; PRELIMINARY</div>
+      <h1>Krish Patel</h1>
+      <p class="subtitle">Hardware-centric engineer — computer architecture, verification, and AI systems.</p>
+      <div class="badges">
+        <span class="badge live">AVAILABLE FOR 2027 INTERNSHIPS</span>
+        <span class="badge">RISC-V</span>
+        <span class="badge">SYSTEMVERILOG</span>
+        <span class="badge">ASIC FLOW</span>
+        <span class="badge">TVM / ML COMPILERS</span>
+      </div>
+    </div>
+    <div class="tb-right">
+      <img class="portrait" src="https://static.wixstatic.com/media/843f1e_69efc195f84f4fa6b0341ea2a1d163ef~mv2.jpg/v1/crop/x_611,y_0,w_1133,h_1640/fill/w_560,h_810,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/krish_patel_edited.jpg" alt="Krish Patel" />
+      <div class="tb-meta">
+        <div><b>LOCATION</b>Pittsburgh, PA</div>
+        <div><b>ISSUED</b>2026-09-02</div>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="shead"><span class="snum">1.0</span><h2>Description &amp; Key Features</h2></div>
+    <div class="two">
+      <div>
+        <p class="caps">DESCRIPTION</p>
+        <p style="margin:0 0 16px">I build systems at the boundary where software stops being an abstraction and starts being a circuit. Five stages of a RISC-V pipeline, a UNIX-like kernel written from an empty file, and a datapath pushed all the way to placed-and-routed silicon — the same curiosity applied at three different altitudes.</p>
+        <p class="caps">KEY FEATURES</p>
+        <ul class="feat">
+          <li>Out-of-order RISC-V microarchitecture: reservation stations, ROB, GShare, early branch recovery</li>
+          <li>Full ASIC flow ownership — RTL through PnR, timing closure, and physical verification</li>
+          <li>Verification discipline: VCS, Verilator, Verdi, CoreMark, directed and random testbenches</li>
+          <li>ML-compiler research on TVM with sub-2% result variance across a pipeline migration</li>
+        </ul>
+      </div>
+      <div>
+        <p class="caps">EDUCATION</p>
+        <div class="edu"><img src="https://static.wixstatic.com/media/843f1e_5e7f03f2ffac4c9b944d1522504f0fe2~mv2.png/v1/fill/w_98,h_80,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Illinois-logo.png" alt="UIUC" /><span>University of Illinois Urbana-Champaign<br><small>B.S. Computer Engineering</small></span></div>
+        <div class="edu"><img src="https://static.wixstatic.com/media/843f1e_37e7cb19917d4d4281fb870a441134e0~mv2.png/v1/fill/w_98,h_90,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/CMU%20logo.png" alt="CMU" /><span>Carnegie Mellon University<br><small>M.S. Electrical &amp; Computer Engineering</small></span></div>
+        <p class="caps" style="margin-top:20px">OPERATING CONDITIONS</p>
+        <table class="spec">
+          <tr><td>HDL</td><td>SystemVerilog, Verilog, VHDL</td></tr>
+          <tr><td>LANGUAGES</td><td>C, C++, Python, Assembly</td></tr>
+          <tr><td>EDA</td><td>Synopsys VCS · Verdi · DC · ICC2</td></tr>
+          <tr><td>DOMAINS</td><td>Microarchitecture, OS, ML compilers</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">2.0</span><h2>Functional Block Diagram</h2><span class="hint">click a block to filter §3</span></div>
+    <div class="bd">
+      <p class="bd-note">Four functional blocks. Each one maps to work in section 3.</p>
+      <div class="blocks" id="blocks">
+        <button class="blk" data-cap="systems" aria-pressed="false"><span class="blk-id">U1</span><span class="blk-name">Systems Foundations</span><span class="blk-sub">Kernels, memory, scheduling</span></button>
+        <button class="blk" data-cap="arch" aria-pressed="false"><span class="blk-id">U2</span><span class="blk-name">Architecture</span><span class="blk-sub">Pipelines, OoO, caches</span></button>
+        <button class="blk" data-cap="silicon" aria-pressed="false"><span class="blk-id">U3</span><span class="blk-name">Silicon Flow</span><span class="blk-sub">Synthesis, PnR, timing</span></button>
+        <button class="blk" data-cap="ai" aria-pressed="false"><span class="blk-id">U4</span><span class="blk-name">Hardware + AI</span><span class="blk-sub">Compilers, accelerators</span></button>
+      </div>
+      <div class="bus"><span>SHARED VERIFICATION BUS</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">3.0</span><h2>Functional Blocks — Detail</h2><span class="hint" id="filterState">showing all</span></div>
+
+    <article class="proj" data-cap="arch">
+      <div class="proj-idx">3.1</div>
+      <div class="proj-main">
+        <h3>Out-of-Order RISC-V Processor</h3>
+        <p class="tagline">FLAGSHIP · U2 ARCHITECTURE</p>
+        <p>A five-stage out-of-order RISC-V core with reservation stations, a reorder buffer, GShare branch prediction, and early branch recovery, backed by a four-way set-associative cache. Validated against CoreMark and a custom directed testbench suite.</p>
+        <div class="chips"><span class="chip">SystemVerilog</span><span class="chip">VCS</span><span class="chip">Verilator</span><span class="chip">Verdi</span><span class="chip">CoreMark</span></div>
+      </div>
+      <div class="proj-side">
+        <p class="caps">BLOCK VIEW</p>
+        <figure class="dia">
+          <svg viewBox="0 0 240 74" role="img" aria-label="Out-of-order pipeline block diagram">
+            <g fill="none" stroke="#14161a" stroke-width="1">
+              <rect x="4" y="26" width="34" height="22"/><rect x="52" y="26" width="34" height="22"/>
+              <rect x="100" y="6" width="42" height="20"/><rect x="100" y="30" width="42" height="20"/><rect x="100" y="54" width="42" height="16"/>
+              <rect x="156" y="26" width="34" height="22"/><rect x="202" y="26" width="34" height="22"/>
+            </g>
+            <g stroke="#1a5fd4" stroke-width="1">
+              <path d="M38 37h14M86 37h14M142 16h8v21M142 40h14M142 62h8V40M190 37h12"/>
+            </g>
+            <g font-family="IBM Plex Mono, monospace" font-size="6.5" fill="#14161a" text-anchor="middle">
+              <text x="21" y="40">FETCH</text><text x="69" y="40">DECODE</text>
+              <text x="121" y="18">RS0</text><text x="121" y="42">RS1</text><text x="121" y="65">RS2</text>
+              <text x="173" y="40">ROB</text><text x="219" y="40">COMMIT</text>
+            </g>
+          </svg>
+        </figure>
+        <p class="caps">CHARACTERISTICS</p>
+        <table class="mtable">
+          <tr><td>Issue</td><td>Out-of-order</td></tr>
+          <tr><td>Predictor</td><td>GShare</td></tr>
+          <tr><td>Cache</td><td>4-way SA</td></tr>
+          <tr><td>Recovery</td><td>Early branch</td></tr>
+        </table>
+      </div>
+    </article>
+
+    <article class="proj" data-cap="systems">
+      <div class="proj-idx">3.2</div>
+      <div class="proj-main">
+        <h3>391 Operating System</h3>
+        <p class="tagline">U1 SYSTEMS FOUNDATIONS</p>
+        <p>A UNIX-like operating system written from scratch in embedded C: paging, interrupt-driven keyboard input, a read-only file system, terminal management, and round-robin scheduling across three concurrent terminals.</p>
+        <div class="chips"><span class="chip">C</span><span class="chip">x86 Assembly</span><span class="chip">QEMU</span><span class="chip">GDB</span></div>
+      </div>
+      <div class="proj-side">
+        <p class="caps">MEMORY MAP</p>
+        <figure class="dia">
+          <svg viewBox="0 0 240 74" role="img" aria-label="Kernel memory map">
+            <g stroke="#14161a" stroke-width="1" fill="none">
+              <rect x="60" y="4" width="120" height="14"/><rect x="60" y="18" width="120" height="14"/>
+              <rect x="60" y="32" width="120" height="14"/><rect x="60" y="46" width="120" height="24"/>
+            </g>
+            <g font-family="IBM Plex Mono, monospace" font-size="6.5" fill="#14161a">
+              <text x="66" y="14">TERMINAL 3</text><text x="66" y="28">TERMINAL 2</text>
+              <text x="66" y="42">TERMINAL 1</text><text x="66" y="60">KERNEL · 4MB PAGE</text>
+            </g>
+            <g font-family="IBM Plex Mono, monospace" font-size="6" fill="#5c6270" text-anchor="end">
+              <text x="56" y="14">0x0C00</text><text x="56" y="60">0x0400</text>
+            </g>
+          </svg>
+        </figure>
+        <p class="caps">CHARACTERISTICS</p>
+        <table class="mtable">
+          <tr><td>Terminals</td><td>3 concurrent</td></tr>
+          <tr><td>Paging</td><td>4KB / 4MB</td></tr>
+          <tr><td>Scheduler</td><td>Round-robin</td></tr>
+          <tr><td>Filesystem</td><td>Read-only</td></tr>
+        </table>
+      </div>
+    </article>
+
+    <article class="proj" data-cap="silicon">
+      <div class="proj-idx">3.3</div>
+      <div class="proj-main">
+        <h3>Datapath Design &amp; Place-and-Route</h3>
+        <p class="tagline">U3 SILICON FLOW</p>
+        <p>A custom datapath carried across the complete ASIC flow — RTL, logic synthesis, floorplanning, placement and routing, timing optimization, power analysis, and physical verification — closing timing on a real standard-cell library.</p>
+        <div class="chips"><span class="chip">Design Compiler</span><span class="chip">ICC2</span><span class="chip">PrimeTime</span><span class="chip">DRC / LVS</span></div>
+      </div>
+      <div class="proj-side">
+        <p class="caps">FLOORPLAN</p>
+        <figure class="dia">
+          <svg viewBox="0 0 240 74" role="img" aria-label="Chip floorplan">
+            <rect x="8" y="6" width="224" height="62" fill="none" stroke="#14161a"/>
+            <g fill="#dfe7f7" stroke="#1a5fd4" stroke-width=".8">
+              <rect x="18" y="16" width="46" height="20"/><rect x="18" y="42" width="46" height="18"/>
+              <rect x="74" y="16" width="60" height="44"/><rect x="144" y="16" width="34" height="44"/>
+              <rect x="188" y="16" width="34" height="20"/><rect x="188" y="42" width="34" height="18"/>
+            </g>
+            <g stroke="#c9c5bc" stroke-width=".5">
+              <path d="M8 12h224M8 62h224"/>
+            </g>
+            <g font-family="IBM Plex Mono, monospace" font-size="5.5" fill="#14161a" text-anchor="middle">
+              <text x="41" y="28">ALU</text><text x="41" y="53">SHIFT</text><text x="104" y="40">REGFILE</text>
+              <text x="161" y="40">CTRL</text><text x="205" y="28">MUX</text><text x="205" y="53">IO</text>
+            </g>
+          </svg>
+        </figure>
+        <p class="caps">CHARACTERISTICS</p>
+        <table class="mtable">
+          <tr><td>Flow</td><td>RTL → GDS</td></tr>
+          <tr><td>Timing</td><td>Closed</td></tr>
+          <tr><td>Checks</td><td>DRC · LVS</td></tr>
+          <tr><td>Analysis</td><td>Power · IR</td></tr>
+        </table>
+      </div>
+    </article>
+
+    <article class="proj" data-cap="ai">
+      <div class="proj-idx">3.4</div>
+      <div class="proj-main">
+        <h3>Tensor Compiler Search-Space Reduction</h3>
+        <p class="tagline">U4 HARDWARE + AI · IBM-ILLINOIS IIDAI</p>
+        <p>Applied NLP-based pruning to shrink the tensor-compiler autotuning search space, then migrated legacy pipelines onto a modern TVM framework while holding result variance under two percent against the original baseline.</p>
+        <div class="chips"><span class="chip">TVM</span><span class="chip">Python</span><span class="chip">NLP</span><span class="chip">Autotuning</span></div>
+      </div>
+      <div class="proj-side">
+        <p class="caps">SEARCH SPACE</p>
+        <figure class="dia">
+          <svg viewBox="0 0 240 74" role="img" aria-label="Search space reduction">
+            <rect x="14" y="10" width="90" height="54" fill="#dfe7f7" stroke="#1a5fd4" stroke-width=".8"/>
+            <rect x="146" y="30" width="34" height="20" fill="#1a5fd4"/>
+            <path d="M110 37h30" stroke="#14161a" stroke-width="1"/>
+            <path d="M136 33l6 4-6 4z" fill="#14161a"/>
+            <g font-family="IBM Plex Mono, monospace" font-size="6" fill="#14161a" text-anchor="middle">
+              <text x="59" y="39">LEGACY SPACE</text><text x="163" y="43" fill="#fff">PRUNED</text>
+              <text x="207" y="39">&lt;2% Δ</text>
+            </g>
+          </svg>
+        </figure>
+        <p class="caps">CHARACTERISTICS</p>
+        <table class="mtable">
+          <tr><td>Framework</td><td>TVM</td></tr>
+          <tr><td>Method</td><td>NLP pruning</td></tr>
+          <tr><td>Variance</td><td>&lt; 2%</td></tr>
+          <tr><td>Duration</td><td>12 months</td></tr>
+        </table>
+      </div>
+    </article>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">4.0</span><h2>Revision History</h2></div>
+    <div class="pad">
+      <table class="rev">
+        <tr><th>PERIOD</th><th>REVISION</th><th>CHANGE NOTES</th></tr>
+        <tr><td>2026 — present</td><td>M.S. ECE, CMU</td><td>Graduate coursework in computer architecture and hardware systems.</td></tr>
+        <tr><td>Jan 2025 — May 2025</td><td>Teaching Assistant, ECE 411</td><td>Mentored student teams through RISC-V processor design, SystemVerilog debugging, verification strategy, hazards, and cache logic.</td></tr>
+        <tr><td>May 2024 — May 2025</td><td>Research Assistant, IBM-IL IIDAI</td><td>Tensor-compiler optimization via NLP-based search-space reduction; legacy-to-TVM migration held under 2% result variance.</td></tr>
+        <tr><td>2021 — 2025</td><td>B.S. CompE, UIUC</td><td>Initial release. Architecture, operating systems, and digital design coursework.</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">5.0</span><h2>Pin Configuration</h2></div>
+    <div class="pad">
+      <div class="pinout">
+        <a class="pin" href="mailto:krishp2@andrew.cmu.edu"><span class="pin-n">PIN 1 · EMAIL</span><span class="pin-l">Get in touch</span><span class="pin-v">krishp2@andrew.cmu.edu</span></a>
+        <a class="pin" href="https://github.com/krishp2"><span class="pin-n">PIN 2 · SOURCE</span><span class="pin-l">GitHub</span><span class="pin-v">github.com/krishp2</span></a>
+        <a class="pin" href="https://www.linkedin.com/in/krish-patel-24bb79238/"><span class="pin-n">PIN 3 · NETWORK</span><span class="pin-l">LinkedIn</span><span class="pin-v">in/krish-patel</span></a>
+      </div>
+    </div>
+  </section>
+
+  <footer><span>KP-2026 · REV C · PAGE 1 OF 1</span><span>© 2026 KRISH PATEL</span></footer>
+</div>
+
+<script>
+// Interactive feature: functional-block filter.
+const blocks = document.querySelectorAll('.blk');
+const projects = document.querySelectorAll('.proj');
+const state = document.getElementById('filterState');
+
+blocks.forEach((block) => {
+  block.addEventListener('click', () => {
+    const wasOn = block.getAttribute('aria-pressed') === 'true';
+    blocks.forEach((b) => b.setAttribute('aria-pressed', 'false'));
+    if (wasOn) {
+      projects.forEach((p) => p.classList.remove('dim'));
+      state.textContent = 'showing all';
+      return;
+    }
+    block.setAttribute('aria-pressed', 'true');
+    const cap = block.dataset.cap;
+    projects.forEach((p) => p.classList.toggle('dim', p.dataset.cap !== cap));
+    state.textContent = 'filtered · ' + block.querySelector('.blk-name').textContent.toLowerCase();
+  });
+});
+</script>
+</body>
+</html>

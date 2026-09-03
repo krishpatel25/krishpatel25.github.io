@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Krish Patel — Descent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --l1:#1b2430; --l2:#161e28; --l3:#111820; --l4:#0b1016; --deep:#070a0e;
+  --text:#e8edf2; --mid:#9aa7b4; --dim:#5f6c7a; --rule:#26313d;
+  --cu:#cf8a56; --cu-soft:rgba(207,138,86,.14);
+  --rail:210px; --w:1120px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--deep);color:var(--text);
+  font-family:"Public Sans",system-ui,sans-serif;font-size:15px;line-height:1.7;
+  -webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.dsp{font-family:"Familjen Grotesk",system-ui,sans-serif}
+.mn{font-family:"JetBrains Mono",monospace}
+
+.shell{display:grid;grid-template-columns:var(--rail) 1fr;
+  width:min(var(--w),calc(100% - 40px));margin-inline:auto;gap:56px}
+
+/* ---------- depth rail ---------- */
+.rail{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;
+  justify-content:center;padding:30px 0}
+.rail-name{position:absolute;top:30px;left:0;font-family:"Familjen Grotesk",sans-serif;
+  font-size:16px;font-weight:600;letter-spacing:-.01em}
+.readout{margin-bottom:22px}
+.readout .k{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.2em;color:var(--dim)}
+.readout .v{font-family:"Familjen Grotesk",sans-serif;font-size:12px;color:var(--cu);
+  letter-spacing:.14em;margin-top:4px;font-weight:600}
+.layers{list-style:none;margin:0;padding:0;position:relative}
+.layers::before{content:"";position:absolute;left:5px;top:8px;bottom:8px;border-left:1px solid var(--rule)}
+.fill{position:absolute;left:5px;top:8px;width:1px;background:var(--cu);
+  transition:height .5s cubic-bezier(.5,0,.2,1);height:0}
+.layers li{position:relative;padding:0 0 26px 26px}
+.layers li:last-child{padding-bottom:0}
+.layers button{background:none;border:0;padding:0;font:inherit;color:var(--dim);cursor:pointer;
+  text-align:left;transition:color .3s;display:block}
+.layers .dot{position:absolute;left:0;top:7px;width:11px;height:11px;border-radius:50%;
+  border:1px solid var(--rule);background:var(--deep);transition:all .35s}
+.layers .lname{font-family:"Familjen Grotesk",sans-serif;font-size:14px;font-weight:600;
+  display:block;letter-spacing:-.005em}
+.layers .lsub{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.14em;
+  display:block;margin-top:2px;opacity:.8}
+.layers li.on button{color:var(--text)}
+.layers li.on .dot{border-color:var(--cu);background:var(--cu);box-shadow:0 0 0 4px var(--cu-soft)}
+.layers li.past button{color:var(--mid)}
+.layers li.past .dot{border-color:var(--cu)}
+.rail-foot{position:absolute;bottom:30px;left:0;font-family:"JetBrains Mono",monospace;
+  font-size:9.5px;color:var(--dim);letter-spacing:.14em;line-height:1.9}
+.rail-foot a:hover{color:var(--cu)}
+
+/* ---------- layers as sections ---------- */
+.layer{padding:110px 0;scroll-margin-top:0;position:relative}
+#l0{background:var(--l1)}#l1{background:var(--l2)}#l2{background:var(--l3)}
+#l3{background:var(--l4)}#l4{background:var(--deep)}
+.layer::before{content:"";position:absolute;left:-100vw;right:-100vw;top:0;bottom:0;
+  background:inherit;z-index:-1}
+.depth{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.2em;color:var(--dim);
+  display:flex;gap:14px;align-items:center;margin-bottom:26px}
+.depth::after{content:"";flex:1;border-top:1px solid var(--rule)}
+
+/* hero */
+h1{font-family:"Familjen Grotesk",sans-serif;font-size:clamp(38px,5.6vw,66px);line-height:1.02;
+  letter-spacing:-.035em;font-weight:600;margin:0 0 26px;max-width:15ch;text-wrap:balance}
+h1 .cu{color:var(--cu)}
+.lede{font-size:17.5px;color:var(--mid);max-width:54ch;margin:0 0 20px}
+.lede b{color:var(--text);font-weight:500}
+.hero-row{display:grid;grid-template-columns:1fr 190px;gap:50px;align-items:end;margin-top:40px}
+.hero-row img{width:190px;aspect-ratio:3/4;object-fit:cover;object-position:50% 20%;
+  filter:grayscale(.85) contrast(1.05)}
+.facts{display:grid;gap:14px;font-size:13.5px}
+.facts div{display:grid;grid-template-columns:96px 1fr;gap:14px;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+.facts b{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.16em;
+  color:var(--dim);font-weight:400;padding-top:4px}
+
+/* layer body */
+.layer h2{font-family:"Familjen Grotesk",sans-serif;font-size:clamp(27px,3.4vw,38px);
+  letter-spacing:-.028em;line-height:1.1;margin:0 0 16px;max-width:19ch;font-weight:600;text-wrap:balance}
+.why{color:var(--mid);max-width:56ch;margin:0 0 40px;font-size:16px}
+.work{display:grid;grid-template-columns:1fr 300px;gap:44px;align-items:start;
+  padding-top:32px;border-top:1px solid var(--rule)}
+.work h3{font-family:"Familjen Grotesk",sans-serif;font-size:21px;margin:0 0 4px;font-weight:600;letter-spacing:-.012em}
+.work .meta{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;color:var(--cu);margin:0 0 14px}
+.work p{margin:0 0 18px;color:var(--mid);max-width:56ch}
+.tags{display:flex;flex-wrap:wrap;gap:7px}
+.tag{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--mid);
+  border:1px solid var(--rule);border-radius:2px;padding:3px 8px}
+.panel{border:1px solid var(--rule);border-radius:3px;overflow:hidden}
+.panel figure{margin:0;padding:16px 14px;background:rgba(0,0,0,.25)}
+.panel svg{display:block;width:100%;height:auto}
+.panel dl{margin:0;display:grid;grid-template-columns:1fr 1fr}
+.panel dl>div{padding:12px 14px;border-top:1px solid var(--rule)}
+.panel dl>div:nth-child(odd){border-right:1px solid var(--rule)}
+.panel dt{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.14em;color:var(--dim);margin-bottom:4px}
+.panel dd{margin:0;font-size:13.5px;font-weight:500}
+.panel dd.cu{color:var(--cu)}
+
+/* flagship emphasis */
+.flag .work{border-top:1px solid var(--cu)}
+.flag .badge{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:9.5px;
+  letter-spacing:.18em;color:var(--cu);border:1px solid rgba(207,138,86,.42);
+  border-radius:2px;padding:3px 9px;margin-bottom:14px}
+
+/* bottom */
+.bedrock{padding:100px 0 40px}
+.bedrock h2{max-width:none}
+.cta{display:grid;gap:1px;background:var(--rule);border-block:1px solid var(--rule);margin-top:32px}
+.cta a{background:var(--deep);display:flex;align-items:center;gap:18px;padding:19px 6px;
+  transition:background .2s,padding-left .22s}
+.cta a:hover{background:var(--l4);padding-left:16px}
+.cta .k{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.18em;color:var(--dim);width:92px}
+.cta .v{font-size:15.5px}
+.cta .ar{margin-left:auto;color:var(--dim);transition:color .2s,transform .2s}
+.cta a:hover .ar{color:var(--cu);transform:translateX(5px)}
+.foot{padding:26px 0 46px;display:flex;justify-content:space-between;
+  font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--dim);letter-spacing:.12em}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr;gap:0}
+  .rail{position:sticky;top:0;height:auto;flex-direction:row;align-items:center;gap:14px;
+    padding:11px 0;background:rgba(7,10,14,.92);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--rule);z-index:30;overflow-x:auto}
+  .rail-name,.rail-foot,.readout .k{display:none}
+  .readout{margin:0;flex-shrink:0}
+  .layers{display:flex;gap:16px}
+  .layers::before,.fill{display:none}
+  .layers li{padding:0 0 0 15px;white-space:nowrap}
+  .layers .dot{top:5px;width:8px;height:8px}
+  .layers .lname{font-size:12px}.layers .lsub{display:none}
+  .layer{padding:66px 0}
+  .hero-row{grid-template-columns:1fr;gap:26px}
+  .hero-row img{width:150px;order:-1}
+  .work{grid-template-columns:1fr;gap:24px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <aside class="rail">
+    <div class="rail-name dsp">Krish Patel</div>
+    <div class="readout">
+      <div class="k">CURRENT DEPTH</div>
+      <div class="v" id="readout">SURFACE</div>
+    </div>
+    <ul class="layers" id="layers">
+      <div class="fill" id="fill"></div>
+      <li class="on"><span class="dot"></span><button data-t="l0"><span class="lname">Surface</span><span class="lsub">WHO</span></button></li>
+      <li><span class="dot"></span><button data-t="l1"><span class="lname">The workload</span><span class="lsub">WHAT WE ASK OF IT</span></button></li>
+      <li><span class="dot"></span><button data-t="l2"><span class="lname">The system</span><span class="lsub">WHAT RUNS IT</span></button></li>
+      <li><span class="dot"></span><button data-t="l3"><span class="lname">The machine</span><span class="lsub">HOW IT THINKS</span></button></li>
+      <li><span class="dot"></span><button data-t="l4"><span class="lname">The silicon</span><span class="lsub">WHAT IT IS MADE OF</span></button></li>
+    </ul>
+    <div class="rail-foot">
+      <a href="mailto:krishp2@andrew.cmu.edu">EMAIL</a><br>
+      <a href="https://github.com/krishp2">GITHUB</a><br>
+      <a href="https://www.linkedin.com/in/krish-patel-24bb79238/">LINKEDIN</a>
+    </div>
+  </aside>
+
+  <main>
+    <section class="layer" id="l0">
+      <div class="depth">00 · SURFACE</div>
+      <h1>Most engineers pick a layer. <span class="cu">I go all the way down.</span></h1>
+      <p class="lede">I'm a computer engineer. I've written the software that runs on a machine, designed the machine that runs the software, and taken that design down to the layout that gets printed on silicon — <b>four layers of the same problem</b>.</p>
+      <p class="lede">Scroll to descend.</p>
+      <div class="hero-row">
+        <div class="facts">
+          <div><b>NOW</b><span>M.S. Electrical &amp; Computer Engineering, Carnegie Mellon</span></div>
+          <div><b>BEFORE</b><span>B.S. Computer Engineering, University of Illinois Urbana-Champaign</span></div>
+          <div><b>LOOKING FOR</b><span>2027 internships in architecture, verification, and hardware for AI</span></div>
+        </div>
+        <img src="https://static.wixstatic.com/media/843f1e_69efc195f84f4fa6b0341ea2a1d163ef~mv2.jpg/v1/crop/x_611,y_0,w_1133,h_1640/fill/w_560,h_810,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/krish_patel_edited.jpg" alt="Krish Patel" />
+      </div>
+    </section>
+
+    <section class="layer" id="l1">
+      <div class="depth">01 · THE WORKLOAD</div>
+      <h2>Nothing about a computer matters until something runs on it.</h2>
+      <p class="why">The top layer is the job itself. Right now that job is increasingly machine learning — and ML is unusually sensitive to the hardware underneath it, which is what makes this layer worth understanding before you design anything below it.</p>
+      <div class="work">
+        <div>
+          <h3>Making a compiler search smarter</h3>
+          <p class="meta">IBM-ILLINOIS DISCOVERY ACCELERATOR · 2024–2025</p>
+          <p>A tensor compiler has to choose how to lay a computation onto hardware, and the number of possible choices is enormous. I used language-model techniques to prune that search space, then rebuilt the legacy pipeline on a modern framework — and proved the rebuild agreed with the original to within two percent.</p>
+          <div class="tags"><span class="tag">TVM</span><span class="tag">Python</span><span class="tag">NLP</span><span class="tag">Autotuning</span></div>
+        </div>
+        <div class="panel">
+          <figure>
+            <svg viewBox="0 0 300 88" role="img" aria-label="Search space narrowed by pruning">
+              <rect x="10" y="12" width="112" height="64" fill="rgba(207,138,86,.1)" stroke="#3a4652" stroke-width="1"/>
+              <rect x="196" y="34" width="46" height="20" fill="#cf8a56"/>
+              <path d="M132 44h48" stroke="#9aa7b4" stroke-width="1"/>
+              <path d="M176 40l7 4-7 4z" fill="#9aa7b4"/>
+              <g font-family="JetBrains Mono, monospace" font-size="8" fill="#e8edf2" text-anchor="middle">
+                <text x="66" y="47">ALL CHOICES</text><text x="219" y="47" fill="#0b1016">KEPT</text>
+              </g>
+              <text x="266" y="47" font-family="JetBrains Mono, monospace" font-size="8" fill="#9aa7b4" text-anchor="middle">±2%</text>
+            </svg>
+          </figure>
+          <dl>
+            <div><dt>FRAMEWORK</dt><dd>TVM</dd></div>
+            <div><dt>AGREEMENT</dt><dd class="cu">&lt; 2%</dd></div>
+            <div><dt>METHOD</dt><dd>NLP pruning</dd></div>
+            <div><dt>DURATION</dt><dd>12 months</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="layer" id="l2">
+      <div class="depth">02 · THE SYSTEM</div>
+      <h2>Between your program and the hardware sits an operating system.</h2>
+      <p class="why">You cannot really claim to understand a computer until you have written the layer that hands out its memory and decides which program runs next. So I wrote one, starting from an empty file.</p>
+      <div class="work">
+        <div>
+          <h3>An operating system, from scratch</h3>
+          <p class="meta">ECE 391 · 2024</p>
+          <p>A UNIX-like operating system in C: memory paging, a keyboard driver that responds to interrupts, a working file system, and a scheduler that keeps three terminals running at once, each convinced it has the machine to itself.</p>
+          <div class="tags"><span class="tag">C</span><span class="tag">x86 Assembly</span><span class="tag">QEMU</span><span class="tag">GDB</span></div>
+        </div>
+        <div class="panel">
+          <figure>
+            <svg viewBox="0 0 300 88" role="img" aria-label="Three terminals sharing one kernel">
+              <g stroke="#3a4652" stroke-width="1" fill="none">
+                <rect x="24" y="8" width="252" height="17"/><rect x="24" y="25" width="252" height="17"/><rect x="24" y="42" width="252" height="17"/>
+              </g>
+              <rect x="24" y="59" width="252" height="21" fill="rgba(207,138,86,.14)" stroke="#cf8a56"/>
+              <g font-family="JetBrains Mono, monospace" font-size="8" fill="#e8edf2">
+                <text x="34" y="20">TERMINAL 3</text><text x="34" y="37">TERMINAL 2</text><text x="34" y="54">TERMINAL 1</text>
+                <text x="34" y="73" fill="#cf8a56">KERNEL — schedules all three</text>
+              </g>
+            </svg>
+          </figure>
+          <dl>
+            <div><dt>TERMINALS</dt><dd class="cu">3 at once</dd></div>
+            <div><dt>SCHEDULER</dt><dd>Round-robin</dd></div>
+            <div><dt>MEMORY</dt><dd>Paged</dd></div>
+            <div><dt>WRITTEN IN</dt><dd>C + asm</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="layer flag" id="l3">
+      <div class="depth">03 · THE MACHINE</div>
+      <h2>This is the layer I care about most.</h2>
+      <p class="why">Underneath the operating system is the processor itself — the thing that decides, thousands of times a second, what to do next and in what order. I built one that does this out of order, guessing at the future and undoing the guess when it's wrong.</p>
+      <div class="work">
+        <div>
+          <span class="badge">FLAGSHIP</span>
+          <h3>A processor that runs ahead of itself</h3>
+          <p class="meta">ECE 411 · SYSTEMVERILOG</p>
+          <p>Most processors wait. This one doesn't: when an instruction stalls, it finds later work that's ready and does that instead, then puts the results back in order before anyone notices. It predicts which way a branch will go, and when it guesses wrong it unwinds the mistake early instead of paying for it. Benchmarked on CoreMark against a hand-written test suite.</p>
+          <div class="tags"><span class="tag">SystemVerilog</span><span class="tag">VCS</span><span class="tag">Verdi</span><span class="tag">Verilator</span><span class="tag">CoreMark</span></div>
+        </div>
+        <div class="panel">
+          <figure>
+            <svg viewBox="0 0 300 108" role="img" aria-label="Work reordered then committed in order">
+              <defs><marker id="d1" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0 0l6 3-6 3z" fill="#cf8a56"/></marker></defs>
+              <g fill="none" stroke="#3a4652" stroke-width="1">
+                <rect x="8" y="40" width="52" height="28" rx="2"/>
+                <rect x="96" y="8" width="60" height="22" rx="2"/><rect x="96" y="43" width="60" height="22" rx="2"/><rect x="96" y="78" width="60" height="22" rx="2"/>
+                <rect x="244" y="40" width="48" height="28" rx="2"/>
+              </g>
+              <rect x="186" y="30" width="40" height="48" rx="2" fill="rgba(207,138,86,.14)" stroke="#cf8a56"/>
+              <g stroke="#cf8a56" stroke-width="1" marker-end="url(#d1)" opacity=".85">
+                <path d="M60 54h30"/><path d="M156 19h16v33h8"/><path d="M156 54h24"/><path d="M156 89h16V56h8"/><path d="M226 54h12"/>
+              </g>
+              <g font-family="JetBrains Mono, monospace" font-size="7.5" fill="#e8edf2" text-anchor="middle">
+                <text x="34" y="57">READ IN</text>
+                <text x="126" y="22">WORK A</text><text x="126" y="57">WORK B</text><text x="126" y="92">WORK C</text>
+                <text x="206" y="57" fill="#cf8a56">REORDER</text><text x="268" y="57">IN ORDER</text>
+              </g>
+              <text x="126" y="105" font-family="JetBrains Mono, monospace" font-size="7" fill="#5f6c7a" text-anchor="middle">whichever is ready first</text>
+            </svg>
+          </figure>
+          <dl>
+            <div><dt>EXECUTES</dt><dd class="cu">Out of order</dd></div>
+            <div><dt>GUESSES</dt><dd>Branches</dd></div>
+            <div><dt>MEMORY</dt><dd>4-way cache</dd></div>
+            <div><dt>PROVEN ON</dt><dd>CoreMark</dd></div>
+          </dl>
+        </div>
+      </div>
+      <div class="work" style="margin-top:34px">
+        <div>
+          <h3>Then I taught it</h3>
+          <p class="meta">TEACHING ASSISTANT · ECE 411 · SPRING 2025</p>
+          <p>I spent a semester walking student teams through building their own processors — debugging their designs, arguing about verification strategy, and explaining the same hazard ten different ways until it landed. That is still the fastest way I have found to actually understand something.</p>
+          <div class="tags"><span class="tag">Mentoring</span><span class="tag">Verification</span><span class="tag">Debugging</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="layer" id="l4">
+      <div class="depth">04 · THE SILICON</div>
+      <h2>Eventually the design has to become a physical object.</h2>
+      <p class="why">A design that only ever runs in simulation is an argument, not a machine. The bottom layer is where it meets area, heat, distance, and the speed of light — and where you find out what your idea actually costs.</p>
+      <div class="work">
+        <div>
+          <h3>Taking a design to layout</h3>
+          <p class="meta">FULL ASIC FLOW · 2025</p>
+          <p>I carried a custom datapath through every stage of the chip design flow — from the description of what it should do, to the arrangement of physical cells on a die, to the wires connecting them — then tuned it until it met timing and passed the checks that decide whether something can actually be manufactured.</p>
+          <div class="tags"><span class="tag">Design Compiler</span><span class="tag">ICC2</span><span class="tag">PrimeTime</span><span class="tag">DRC / LVS</span></div>
+        </div>
+        <div class="panel">
+          <figure>
+            <svg viewBox="0 0 300 88" role="img" aria-label="Blocks placed on a die">
+              <rect x="8" y="8" width="284" height="72" fill="none" stroke="#3a4652"/>
+              <g fill="rgba(207,138,86,.14)" stroke="#cf8a56" stroke-width=".9">
+                <rect x="22" y="20" width="62" height="22"/><rect x="22" y="48" width="62" height="20"/>
+                <rect x="94" y="20" width="80" height="48"/><rect x="184" y="20" width="48" height="48"/>
+                <rect x="242" y="20" width="38" height="22"/><rect x="242" y="48" width="38" height="20"/>
+              </g>
+              <g font-family="JetBrains Mono, monospace" font-size="7" fill="#e8edf2" text-anchor="middle">
+                <text x="53" y="34">MATH</text><text x="53" y="61">SHIFT</text><text x="134" y="47">REGISTERS</text>
+                <text x="208" y="47">CONTROL</text><text x="261" y="34">MUX</text><text x="261" y="61">I/O</text>
+              </g>
+            </svg>
+          </figure>
+          <dl>
+            <div><dt>FLOW</dt><dd class="cu">Design → layout</dd></div>
+            <div><dt>TIMING</dt><dd>Closed</dd></div>
+            <div><dt>CHECKS</dt><dd>DRC · LVS</dd></div>
+            <div><dt>ANALYSIS</dt><dd>Power</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="bedrock">
+      <div class="depth">BEDROCK</div>
+      <h2>That's the whole stack. Let's talk.</h2>
+      <p class="why">I'm looking for 2027 internships where the hardware and the workload get designed against each other rather than in separate rooms.</p>
+      <div class="cta">
+        <a href="mailto:krishp2@andrew.cmu.edu"><span class="k">EMAIL</span><span class="v">krishp2@andrew.cmu.edu</span><span class="ar">→</span></a>
+        <a href="https://github.com/krishp2"><span class="k">GITHUB</span><span class="v">github.com/krishp2</span><span class="ar">→</span></a>
+        <a href="https://www.linkedin.com/in/krish-patel-24bb79238/"><span class="k">LINKEDIN</span><span class="v">in/krish-patel</span><span class="ar">→</span></a>
+      </div>
+      <div class="foot"><span>© 2026 KRISH PATEL</span><span>HAND-CODED</span></div>
+    </section>
+  </main>
+</div>
+
+<script>
+// Interactive feature: a depth rail that tracks which layer of the stack you are reading,
+// fills in as you descend, and jumps when clicked.
+const items = [...document.querySelectorAll('#layers li')];
+const buttons = items.map((li) => li.querySelector('button'));
+const sections = buttons.map((b) => document.getElementById(b.dataset.t));
+const readout = document.getElementById('readout');
+const fill = document.getElementById('fill');
+
+buttons.forEach((button) => {
+  button.addEventListener('click', () => {
+    document.getElementById(button.dataset.t).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+function mark(i) {
+  items.forEach((li, n) => {
+    li.classList.toggle('on', n === i);
+    li.classList.toggle('past', n < i);
+  });
+  readout.textContent = buttons[i].querySelector('.lname').textContent.toUpperCase();
+  const span = items.length > 1 ? (i / (items.length - 1)) * 100 : 0;
+  fill.style.height = 'calc(' + span + '% - 0px)';
+}
+
+let at = -1;
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    const i = sections.indexOf(entry.target);
+    if (i !== -1 && i !== at) { at = i; mark(i); }
+  });
+}, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+
+sections.forEach((s) => io.observe(s));
+mark(0);
+</script>
+</body>
+</html>

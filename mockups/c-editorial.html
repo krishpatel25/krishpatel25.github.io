@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Krish Patel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#121214; --bg2:#191919; --text:#f2f0ee; --mid:#a7a29c; --dim:#6f6a65;
+  --rule:#2b2b2e; --clay:#e0796f; --w:720px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:"Instrument Sans",system-ui,sans-serif;font-size:15px;line-height:1.72;
+  -webkit-font-smoothing:antialiased}
+.wrap{width:min(var(--w),calc(100% - 44px));margin-inline:auto}
+a{color:inherit;text-decoration:none}
+.mono{font-family:"JetBrains Mono",monospace}
+.label{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--dim)}
+
+/* ---------- header ---------- */
+header{padding:30px 0 0}
+.bar{display:flex;align-items:center;gap:18px}
+.brand{font-family:Fraunces,serif;font-size:17px;letter-spacing:-.01em}
+nav{margin-left:auto;display:flex;gap:22px;font-size:13px;color:var(--mid)}
+nav a{position:relative;padding-bottom:2px}
+nav a::after{content:"";position:absolute;left:0;right:100%;bottom:0;border-bottom:1px solid var(--clay);
+  transition:right .28s ease}
+nav a:hover{color:var(--text)}
+nav a:hover::after{right:0}
+.socials{display:flex;gap:8px}
+.socials a{width:26px;height:26px;display:grid;place-items:center;border:1px solid var(--rule);
+  border-radius:50%;transition:border-color .2s,color .2s}
+.socials a:hover{border-color:var(--clay);color:var(--clay)}
+.socials svg{width:12px;height:12px;fill:currentColor}
+
+/* ---------- hero ---------- */
+.hero{padding:74px 0 66px}
+.hero .label{margin-bottom:20px;display:block}
+h1{font-family:Fraunces,serif;font-weight:400;font-size:52px;line-height:1.06;
+  letter-spacing:-.025em;margin:0 0 24px}
+h1 .clay{color:var(--clay);font-style:italic}
+.hero p{color:var(--mid);max-width:52ch;margin:0 0 16px;font-size:16px}
+.hero p strong{color:var(--text);font-weight:500}
+.hero-grid{display:grid;grid-template-columns:1fr 176px;gap:48px;align-items:end}
+.portrait{width:176px;aspect-ratio:3/4;object-fit:cover;object-position:50% 20%;
+  filter:grayscale(1) contrast(1.04);border-radius:1px}
+.edu{display:grid;gap:12px;margin-top:30px;padding-top:24px;border-top:1px solid var(--rule)}
+.edu-row{display:flex;align-items:center;gap:12px}
+.edu-row img{width:24px;height:24px;object-fit:contain;opacity:.85}
+.edu-row span{font-size:13.5px;line-height:1.4}
+.edu-row small{display:block;color:var(--dim);font-size:12px}
+
+/* ---------- section frame ---------- */
+section{padding:66px 0;border-top:1px solid var(--rule)}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:8px}
+.sec-head h2{font-family:Fraunces,serif;font-weight:400;font-size:30px;letter-spacing:-.02em;margin:0}
+.sec-lede{color:var(--mid);max-width:54ch;margin:0 0 40px;font-size:14.5px}
+
+/* ---------- projects ---------- */
+.p{border-top:1px solid var(--rule);padding:30px 0 26px}
+.p:first-of-type{border-top:0;padding-top:6px}
+.p-top{display:grid;grid-template-columns:44px 1fr;gap:20px}
+.p-num{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--clay);padding-top:8px;letter-spacing:.08em}
+.p-title{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.p h3{font-family:Fraunces,serif;font-weight:500;font-size:23px;letter-spacing:-.015em;margin:0}
+.flag{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.16em;color:var(--clay);
+  border:1px solid rgba(224,121,111,.4);border-radius:2px;padding:2px 7px}
+.p-desc{color:var(--mid);margin:10px 0 16px;max-width:56ch}
+.p-tags{display:flex;flex-wrap:wrap;gap:14px;font-family:"JetBrains Mono",monospace;
+  font-size:10.5px;color:var(--dim);letter-spacing:.05em}
+.p-toggle{margin-top:18px;background:none;border:0;padding:0;font:inherit;font-size:13px;
+  color:var(--mid);cursor:pointer;display:inline-flex;align-items:center;gap:9px;transition:color .2s}
+.p-toggle:hover{color:var(--clay)}
+.p-toggle .ic{width:15px;height:15px;border:1px solid currentColor;border-radius:50%;
+  display:grid;place-items:center;font-size:11px;line-height:1;padding-bottom:1px}
+.drawer{overflow:hidden;max-height:0;transition:max-height .42s cubic-bezier(.4,0,.2,1)}
+.drawer-inner{padding:22px 0 4px}
+.dgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);
+  border:1px solid var(--rule);border-radius:2px;overflow:hidden;margin-bottom:20px}
+.dgrid div{background:var(--bg2);padding:13px 14px}
+.dgrid b{display:block;font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.14em;
+  color:var(--dim);font-weight:400;margin-bottom:5px}
+.dgrid span{font-size:13px}
+.dgrid span.clay{color:var(--clay)}
+.dnote{color:var(--mid);font-size:14px;margin:0;padding-left:16px;border-left:1px solid var(--clay);max-width:58ch}
+figure.viz{margin:0 0 20px;background:var(--bg2);border:1px solid var(--rule);border-radius:2px;padding:16px}
+figure.viz svg{display:block;width:100%;height:auto}
+
+/* ---------- experience ---------- */
+.x{display:grid;grid-template-columns:120px 1fr;gap:26px;padding:24px 0;border-top:1px solid var(--rule)}
+.x:first-of-type{border-top:0}
+.x-when{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--dim);padding-top:4px;letter-spacing:.03em}
+.x h3{margin:0 0 2px;font-size:16px;font-weight:600}
+.x .org{color:var(--clay);font-size:13px;margin:0 0 9px}
+.x p{margin:0;color:var(--mid);font-size:14px;max-width:54ch}
+
+/* ---------- contact ---------- */
+.contact h2{font-family:Fraunces,serif;font-weight:400;font-size:34px;margin:0 0 12px;letter-spacing:-.025em}
+.contact>p{color:var(--mid);max-width:44ch;margin:0 0 30px}
+.cl{display:grid;gap:1px;background:var(--rule);border-block:1px solid var(--rule)}
+.cl a{background:var(--bg);display:flex;align-items:center;gap:16px;padding:17px 4px;
+  transition:background .2s,padding-left .2s}
+.cl a:hover{background:var(--bg2);padding-left:14px}
+.cl a .k{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.16em;color:var(--dim);width:86px}
+.cl a .v{font-size:15px}
+.cl a .arrow{margin-left:auto;color:var(--dim);transition:color .2s,transform .2s}
+.cl a:hover .arrow{color:var(--clay);transform:translateX(4px)}
+footer{padding:34px 0 46px;display:flex;justify-content:space-between;color:var(--dim);font-size:12px}
+
+@media (max-width:640px){
+  body{font-size:14.5px}
+  .hero-grid{grid-template-columns:1fr;gap:30px;align-items:start}
+  .portrait{width:148px;order:-1}
+  h1{font-size:36px}
+  nav{display:none}
+  .p-top{grid-template-columns:1fr;gap:6px}
+  .p-num{padding-top:0}
+  .dgrid{grid-template-columns:1fr 1fr}
+  .x{grid-template-columns:1fr;gap:8px}
+  .cl a .k{width:70px}
+}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="bar">
+    <span class="brand">Krish Patel</span>
+    <nav>
+      <a href="#work">Work</a><a href="#experience">Experience</a><a href="#contact">Contact</a>
+    </nav>
+    <div class="socials">
+      <a href="https://github.com/krishp2" aria-label="GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0a8 8 0 0 0-2.5 15.6c.4.1.5-.2.5-.4v-1.4c-2.2.5-2.7-1-2.7-1-.4-1-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.2 1.9.9 2.4.7 0-.5.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-3.9 0-.9.3-1.6.8-2.1-.1-.2-.4-1 .1-2.1 0 0 .7-.2 2.2.8a7.5 7.5 0 0 1 4 0c1.5-1 2.2-.8 2.2-.8.5 1.1.2 1.9.1 2.1.5.5.8 1.2.8 2.1 0 3-1.8 3.7-3.6 3.9.3.3.6.8.6 1.6v2.3c0 .2.1.5.6.4A8 8 0 0 0 8 0Z"/></svg></a>
+      <a href="https://www.linkedin.com/in/krish-patel-24bb79238/" aria-label="LinkedIn"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.6 2.2a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0ZM.9 4.6h2.6V14H.9V4.6Zm4.3 0h2.5v1.3h.1c.4-.7 1.3-1.5 2.7-1.5 2.8 0 3.4 1.9 3.4 4.3V14h-2.6V9.2c0-1.1 0-2.6-1.6-2.6s-1.8 1.2-1.8 2.5V14H5.2V4.6Z"/></svg></a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero" style="border-top:0">
+    <span class="label">Hardware · Architecture · AI systems</span>
+    <div class="hero-grid">
+      <div>
+        <h1>I build the layer where<br>software becomes <span class="clay">signal</span>.</h1>
+        <p>I'm a computer engineer working on <strong>processor architecture, verification, and hardware for AI</strong> — out-of-order RISC-V cores, a UNIX-like kernel written from an empty file, and a datapath carried all the way to placed-and-routed layout.</p>
+        <p>Currently at Carnegie Mellon, thinking about how architecture choices and verification discipline shape efficient compute.</p>
+      </div>
+      <img class="portrait" src="https://static.wixstatic.com/media/843f1e_69efc195f84f4fa6b0341ea2a1d163ef~mv2.jpg/v1/crop/x_611,y_0,w_1133,h_1640/fill/w_560,h_810,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/krish_patel_edited.jpg" alt="Krish Patel" />
+    </div>
+    <div class="edu">
+      <div class="edu-row"><img src="https://static.wixstatic.com/media/843f1e_37e7cb19917d4d4281fb870a441134e0~mv2.png/v1/fill/w_98,h_90,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/CMU%20logo.png" alt="CMU"><span>Carnegie Mellon University<small>M.S. Electrical &amp; Computer Engineering</small></span></div>
+      <div class="edu-row"><img src="https://static.wixstatic.com/media/843f1e_5e7f03f2ffac4c9b944d1522504f0fe2~mv2.png/v1/fill/w_98,h_80,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Illinois-logo.png" alt="UIUC"><span>University of Illinois Urbana-Champaign<small>B.S. Computer Engineering</small></span></div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="sec-head"><span class="label">01</span><h2>Selected work</h2></div>
+    <p class="sec-lede">Three projects, moving down the stack — from the software that runs on a machine, to the machine itself, to the silicon it's printed on.</p>
+
+    <article class="p">
+      <div class="p-top">
+        <div class="p-num">01</div>
+        <div>
+          <div class="p-title"><h3>Out-of-Order RISC-V Processor</h3><span class="flag">FLAGSHIP</span></div>
+          <p class="p-desc">A five-stage out-of-order RISC-V core. Reservation stations feed the execution units, a reorder buffer restores program order at commit, GShare predicts branches, and early recovery flushes a mispredicted path before it costs more cycles.</p>
+          <div class="p-tags"><span>SystemVerilog</span><span>VCS · Verdi</span><span>Verilator</span><span>CoreMark</span></div>
+          <button class="p-toggle" type="button" aria-expanded="false"><span class="ic">+</span>See the architecture</button>
+          <div class="drawer">
+            <div class="drawer-inner">
+              <figure class="viz">
+                <svg viewBox="0 0 560 108" role="img" aria-label="Out-of-order core diagram">
+                  <defs><marker id="a1" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0 0l6 3-6 3z" fill="#e0796f"/></marker></defs>
+                  <g fill="none" stroke="#3a3a3e" stroke-width="1">
+                    <rect x="8" y="40" width="68" height="30" rx="2"/><rect x="98" y="40" width="68" height="30" rx="2"/>
+                    <rect x="188" y="8" width="76" height="24" rx="2"/><rect x="188" y="42" width="76" height="24" rx="2"/><rect x="188" y="76" width="76" height="24" rx="2"/>
+                    <rect x="382" y="40" width="70" height="30" rx="2"/><rect x="474" y="40" width="78" height="30" rx="2"/>
+                  </g>
+                  <rect x="288" y="26" width="66" height="56" rx="2" fill="rgba(224,121,111,.1)" stroke="#e0796f"/>
+                  <g stroke="#e0796f" stroke-width="1" marker-end="url(#a1)" opacity=".8">
+                    <path d="M76 55h16"/><path d="M166 55h16"/>
+                    <path d="M264 20h12v35h6"/><path d="M264 54h18"/><path d="M264 88h12V55h6"/>
+                    <path d="M354 54h22"/><path d="M452 55h16"/>
+                  </g>
+                  <g font-family="JetBrains Mono, monospace" font-size="8.5" fill="#f2f0ee" text-anchor="middle">
+                    <text x="42" y="59">FETCH</text><text x="132" y="59">DECODE</text>
+                    <text x="226" y="24">RS · ALU</text><text x="226" y="58">RS · MUL</text><text x="226" y="92">RS · LSU</text>
+                    <text x="321" y="58" fill="#e0796f">ROB</text><text x="417" y="59">4-WAY $</text><text x="513" y="59">COMMIT</text>
+                  </g>
+                </svg>
+              </figure>
+              <div class="dgrid">
+                <div><b>ISSUE</b><span class="clay">Out-of-order</span></div>
+                <div><b>PREDICTOR</b><span>GShare</span></div>
+                <div><b>CACHE</b><span>4-way SA</span></div>
+                <div><b>BENCHMARK</b><span>CoreMark</span></div>
+              </div>
+              <p class="dnote">The hard part wasn't issuing out of order — it was proving correctness. Directed tests for each hazard class, random instruction streams for the rest, and Verdi waveforms whenever the two disagreed.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="p">
+      <div class="p-top">
+        <div class="p-num">02</div>
+        <div>
+          <div class="p-title"><h3>391 Operating System</h3></div>
+          <p class="p-desc">A UNIX-like operating system written from an empty file in embedded C — paging, an interrupt-driven keyboard driver, a read-only file system, terminal management, and round-robin scheduling across three concurrent terminals.</p>
+          <div class="p-tags"><span>C</span><span>x86 Assembly</span><span>QEMU · GDB</span></div>
+          <button class="p-toggle" type="button" aria-expanded="false"><span class="ic">+</span>See the memory map</button>
+          <div class="drawer">
+            <div class="drawer-inner">
+              <figure class="viz">
+                <svg viewBox="0 0 560 96" role="img" aria-label="Kernel memory map">
+                  <g stroke="#3a3a3e" stroke-width="1" fill="none">
+                    <rect x="150" y="6" width="260" height="19"/><rect x="150" y="25" width="260" height="19"/>
+                    <rect x="150" y="44" width="260" height="19"/>
+                  </g>
+                  <rect x="150" y="63" width="260" height="26" fill="rgba(224,121,111,.1)" stroke="#e0796f"/>
+                  <g font-family="JetBrains Mono, monospace" font-size="8.5" fill="#f2f0ee">
+                    <text x="162" y="19">TERMINAL 3 · 4KB PAGES</text><text x="162" y="38">TERMINAL 2 · 4KB PAGES</text>
+                    <text x="162" y="57">TERMINAL 1 · 4KB PAGES</text><text x="162" y="80" fill="#e0796f">KERNEL · 4MB PAGE</text>
+                  </g>
+                  <g font-family="JetBrains Mono, monospace" font-size="7.5" fill="#6f6a65" text-anchor="end">
+                    <text x="142" y="19">0x0C00000</text><text x="142" y="80">0x0400000</text>
+                  </g>
+                </svg>
+              </figure>
+              <div class="dgrid">
+                <div><b>TERMINALS</b><span class="clay">3 concurrent</span></div>
+                <div><b>PAGING</b><span>4KB / 4MB</span></div>
+                <div><b>SCHEDULER</b><span>Round-robin</span></div>
+                <div><b>FILESYSTEM</b><span>Read-only</span></div>
+              </div>
+              <p class="dnote">Writing a scheduler teaches you what a context switch actually costs — every register saved is a real store to real memory, and you feel it.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="p">
+      <div class="p-top">
+        <div class="p-num">03</div>
+        <div>
+          <div class="p-title"><h3>Datapath Design &amp; Place-and-Route</h3></div>
+          <p class="p-desc">A custom datapath carried across the complete ASIC flow — RTL, synthesis, floorplanning, placement and routing, timing optimization, power analysis, and physical verification — closing timing against a real standard-cell library.</p>
+          <div class="p-tags"><span>Design Compiler</span><span>ICC2</span><span>PrimeTime</span><span>DRC · LVS</span></div>
+          <button class="p-toggle" type="button" aria-expanded="false"><span class="ic">+</span>See the floorplan</button>
+          <div class="drawer">
+            <div class="drawer-inner">
+              <figure class="viz">
+                <svg viewBox="0 0 560 108" role="img" aria-label="Chip floorplan">
+                  <rect x="8" y="8" width="544" height="92" fill="none" stroke="#3a3a3e"/>
+                  <g fill="rgba(224,121,111,.12)" stroke="#e0796f" stroke-width=".9">
+                    <rect x="28" y="24" width="110" height="28"/><rect x="28" y="60" width="110" height="24"/>
+                    <rect x="156" y="24" width="150" height="60"/>
+                    <rect x="324" y="24" width="90" height="60"/>
+                    <rect x="432" y="24" width="98" height="28"/><rect x="432" y="60" width="98" height="24"/>
+                  </g>
+                  <g stroke="#2b2b2e" stroke-width=".6"><path d="M8 18h544M8 92h544"/></g>
+                  <g font-family="JetBrains Mono, monospace" font-size="8" fill="#f2f0ee" text-anchor="middle">
+                    <text x="83" y="41">ALU</text><text x="83" y="75">SHIFTER</text><text x="231" y="57">REGISTER FILE</text>
+                    <text x="369" y="57">CONTROL</text><text x="481" y="41">MUX BANK</text><text x="481" y="75">I/O</text>
+                  </g>
+                </svg>
+              </figure>
+              <div class="dgrid">
+                <div><b>FLOW</b><span class="clay">RTL → GDS</span></div>
+                <div><b>TIMING</b><span>Closed</span></div>
+                <div><b>CHECKS</b><span>DRC · LVS</span></div>
+                <div><b>ANALYSIS</b><span>Power · IR</span></div>
+              </div>
+              <p class="dnote">Synthesis is where an elegant RTL idea meets a standard-cell library and negotiates. Most of the work was reading timing reports and deciding what to give up.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section id="experience">
+    <div class="sec-head"><span class="label">02</span><h2>Experience</h2></div>
+    <p class="sec-lede">Research on the compiler side, teaching on the architecture side.</p>
+    <article class="x">
+      <div class="x-when">May 2024 —<br>May 2025</div>
+      <div>
+        <h3>Research Assistant</h3>
+        <p class="org">IBM-Illinois Discovery Accelerator Institute</p>
+        <p>Optimized tensor compilers using NLP-based search-space reduction, and migrated legacy pipelines onto a modern TVM framework while holding result variance under two percent against the original baseline.</p>
+      </div>
+    </article>
+    <article class="x">
+      <div class="x-when">Jan 2025 —<br>May 2025</div>
+      <div>
+        <h3>Teaching Assistant</h3>
+        <p class="org">ECE 411 · Computer Architecture</p>
+        <p>Mentored student teams through RISC-V processor design, SystemVerilog debugging, verification strategy, pipeline hazards, and cache logic.</p>
+      </div>
+    </article>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="sec-head"><span class="label">03</span><h2>Get in touch</h2></div>
+    <p>Open to 2027 internships in computer architecture, verification, and hardware for AI.</p>
+    <div class="cl">
+      <a href="mailto:krishp2@andrew.cmu.edu"><span class="k">EMAIL</span><span class="v">krishp2@andrew.cmu.edu</span><span class="arrow">→</span></a>
+      <a href="https://github.com/krishp2"><span class="k">GITHUB</span><span class="v">github.com/krishp2</span><span class="arrow">→</span></a>
+      <a href="https://www.linkedin.com/in/krish-patel-24bb79238/"><span class="k">LINKEDIN</span><span class="v">in/krish-patel</span><span class="arrow">→</span></a>
+    </div>
+  </section>
+
+  <footer><span>© 2026 Krish Patel</span><span>Hand-coded</span></footer>
+</main>
+
+<script>
+// Interactive feature: each project opens a spec drawer with a diagram and measured details.
+document.querySelectorAll('.p-toggle').forEach((toggle) => {
+  const drawer = toggle.nextElementSibling;
+  toggle.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    toggle.querySelector('.ic').textContent = open ? '+' : '−';
+    drawer.style.maxHeight = open ? '0px' : drawer.scrollHeight + 'px';
+  });
+});
+
+// Keep an open drawer correctly sized when the viewport changes.
+window.addEventListener('resize', () => {
+  document.querySelectorAll('.p-toggle[aria-expanded="true"]').forEach((toggle) => {
+    const drawer = toggle.nextElementSibling;
+    drawer.style.maxHeight = drawer.scrollHeight + 'px';
+  });
+});
+</script>
+</body>
+</html>

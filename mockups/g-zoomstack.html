@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Krish Patel — Inside the Machine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --stage:#f6f6f3; --card:#fff; --ink:#101208; --mid:#5c6156; --dim:#9b9f93;
+  --rule:#d7d9d0; --hair:#e8e9e3; --red:#d92d20; --red-soft:rgba(217,45,32,.08);
+  --sketch:#c3c8cd;
+}
+*{box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{margin:0;background:var(--stage);color:var(--ink);
+  font-family:Barlow,system-ui,sans-serif;font-size:15px;line-height:1.6;
+  -webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+.cnd{font-family:"Barlow Condensed",system-ui,sans-serif}
+
+/* ================= stage ================= */
+.stage{position:fixed;inset:0;display:grid;
+  grid-template-columns:1fr 268px 92px;
+  grid-template-rows:auto 1fr auto;
+  column-gap:38px;padding:22px 30px 20px;max-width:1440px;margin-inline:auto}
+
+/* ---- background sketch ---- */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg .sk{position:absolute;top:50%;left:46%;translate:-50% -50%;
+  width:min(112vh,104vw);opacity:0;scale:.86;
+  transition:opacity .78s ease,scale 1.15s cubic-bezier(.22,.7,.25,1)}
+.bg .sk.on{opacity:1;scale:1}
+.bg .sk.past{opacity:0;scale:1.9}
+.bg svg{width:100%;height:auto;display:block}
+.bg svg *{vector-effect:non-scaling-stroke}
+
+/* ---- hud ---- */
+.hud{grid-column:1/-1;display:flex;align-items:center;gap:16px;
+  padding-bottom:13px;border-bottom:1px solid var(--ink);position:relative;z-index:5}
+.hud .me{font-family:"Barlow Condensed",sans-serif;font-size:21px;font-weight:600;letter-spacing:.01em}
+.hud .role{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.16em;
+  color:var(--mid);padding-left:16px;border-left:1px solid var(--rule)}
+.hud .links{margin-left:auto;display:flex;gap:16px;
+  font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.14em;color:var(--mid)}
+.hud .links a{padding-bottom:2px;border-bottom:1px solid transparent;transition:all .2s}
+.hud .links a:hover{color:var(--red);border-bottom-color:var(--red)}
+
+/* ---- level content ---- */
+.levels{position:relative;z-index:4;display:grid;align-content:center;min-height:0}
+.lvl{grid-area:1/1;opacity:0;scale:.72;pointer-events:none;
+  transition:opacity .5s ease,scale .8s cubic-bezier(.22,.7,.25,1);max-width:640px}
+.lvl.on{opacity:1;scale:1;pointer-events:auto}
+.lvl.past{opacity:0;scale:1.75}
+
+.tagline{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.2em;
+  color:var(--red);margin:0 0 13px;display:flex;align-items:center;gap:11px}
+.tagline::after{content:"";flex:1;border-top:1px solid var(--rule);max-width:120px}
+h1{font-family:"Barlow Condensed",sans-serif;font-size:clamp(40px,5.4vw,70px);line-height:.96;
+  letter-spacing:-.014em;margin:0 0 18px;font-weight:700;max-width:14ch;text-wrap:balance}
+h1 em{font-style:normal;color:var(--red)}
+h2{font-family:"Barlow Condensed",sans-serif;font-size:clamp(30px,3.7vw,46px);line-height:1.02;
+  letter-spacing:-.008em;margin:0 0 14px;font-weight:600;max-width:17ch;text-wrap:balance}
+.say{color:var(--mid);font-size:16px;margin:0 0 22px;max-width:52ch}
+.say b{color:var(--ink);font-weight:600}
+
+.proj{background:var(--card);border:1px solid var(--ink);padding:17px 19px;max-width:560px}
+.proj.key{border-color:var(--red);border-width:1.5px}
+.proj .flag{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:9px;
+  letter-spacing:.18em;background:var(--red);color:#fff;padding:3px 9px;margin-bottom:10px}
+.proj h3{font-family:"Barlow Condensed",sans-serif;font-size:22px;margin:0 0 2px;font-weight:600}
+.proj .src{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.14em;
+  color:var(--red);margin:0 0 11px}
+.proj p{margin:0 0 13px;font-size:14.5px;color:#31352c;max-width:54ch}
+.row{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--mid);
+  border:1px solid var(--rule);padding:2px 7px}
+.facts{display:flex;flex-wrap:wrap;gap:22px;margin-top:22px}
+.facts div{font-size:13.5px}
+.facts b{display:block;font-family:"JetBrains Mono",monospace;font-size:9px;
+  letter-spacing:.15em;color:var(--dim);font-weight:400;margin-bottom:3px}
+
+/* ---- unboxing viewport ---- */
+.unbox{position:relative;z-index:5;align-self:center;
+  border:1px solid var(--ink);background:var(--card);aspect-ratio:1;display:grid}
+.unbox .cap{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;
+  padding:8px 10px;font-family:"JetBrains Mono",monospace;font-size:8.5px;
+  letter-spacing:.14em;color:var(--dim);border-bottom:1px solid var(--hair);background:var(--card);z-index:2}
+.unbox .cap b{color:var(--red);font-weight:400}
+.ub{grid-area:1/1;display:grid;place-items:center;padding:30px 18px 18px;
+  opacity:0;scale:.6;transition:opacity .48s ease,scale .8s cubic-bezier(.22,.7,.25,1)}
+.ub.on{opacity:1;scale:1}
+.ub.past{opacity:0;scale:2.4}
+.ub svg{width:100%;height:auto;display:block}
+/* the red box marking where we zoom next */
+.next-box{stroke:var(--red);fill:rgba(217,45,32,.07);stroke-width:1.4}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.34}}
+.ub.on .next-box{animation:pulse 2.4s ease-in-out infinite}
+
+/* ---- depth ruler ---- */
+.ruler{position:relative;z-index:5;display:flex;flex-direction:column;
+  justify-content:center;padding:6px 0}
+.ruler-in{position:relative;padding-left:14px}
+.ruler-in::before{content:"";position:absolute;left:0;top:6px;bottom:6px;border-left:1px solid var(--rule)}
+.ruler .fill{position:absolute;left:0;top:6px;width:1px;background:var(--red);height:0;
+  transition:height .7s cubic-bezier(.35,0,.2,1)}
+.tick{position:relative;display:block;width:100%;text-align:left;background:none;border:0;
+  padding:0 0 22px;cursor:pointer;color:var(--dim);transition:color .3s}
+.tick:last-child{padding-bottom:0}
+.tick:hover{color:var(--mid)}
+.tick i{position:absolute;left:-14px;top:5px;width:9px;height:1px;background:var(--rule);transition:all .3s}
+.tick .n{font-family:"Barlow Condensed",sans-serif;font-size:15px;font-weight:600;display:block;line-height:1}
+.tick .w{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.1em;
+  display:block;margin-top:3px;opacity:.85}
+.tick.on{color:var(--ink)}
+.tick.on i{background:var(--red);width:13px;left:-14px;height:1.5px}
+.tick.past{color:var(--mid)}
+.tick.past i{background:var(--red)}
+.ruler-cap{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.16em;
+  color:var(--dim);margin-bottom:14px}
+
+/* ---- footer hint ---- */
+.hint{grid-column:1/-1;display:flex;align-items:center;gap:14px;padding-top:13px;
+  border-top:1px solid var(--rule);position:relative;z-index:5;
+  font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.15em;color:var(--dim)}
+.hint .keys{display:flex;gap:5px}
+.hint kbd{border:1px solid var(--rule);background:var(--card);padding:1px 5px;
+  font-family:inherit;font-size:8.5px;color:var(--mid)}
+.hint .depth{margin-left:auto;color:var(--mid)}
+.hint .depth b{color:var(--red);font-weight:400}
+.wheel{width:15px;height:23px;border:1px solid var(--mid);border-radius:8px;position:relative;flex-shrink:0}
+.wheel::after{content:"";position:absolute;left:50%;top:5px;width:2px;height:4px;
+  background:var(--red);translate:-50% 0;animation:roll 1.9s ease-in-out infinite}
+@keyframes roll{0%,100%{transform:translateY(0);opacity:1}55%{transform:translateY(7px);opacity:.2}}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.01ms!important;animation:none!important}
+  .lvl,.ub,.bg .sk{scale:1!important}
+}
+@media (max-width:1080px){
+  .stage{grid-template-columns:1fr 190px 78px;column-gap:24px}
+  h1{font-size:clamp(34px,6vw,52px)}
+}
+@media (max-width:820px){
+  html,body{overflow:auto}
+  .stage{position:static;grid-template-columns:1fr;grid-template-rows:auto;
+    row-gap:20px;padding:16px 20px 26px;min-height:100vh}
+  .hud .role{display:none}
+  .levels{min-height:62vh}
+  .unbox{max-width:230px;justify-self:center}
+  .ruler{padding:0}
+  .ruler-in{display:flex;gap:18px;overflow-x:auto;padding:0 0 6px}
+  .ruler-in::before,.ruler .fill{display:none}
+  .ruler-cap{display:none}
+  .tick{width:auto;white-space:nowrap;padding:0}
+  .tick i{position:static;display:block;width:100%;height:2px;margin-bottom:5px;background:var(--rule)}
+  .tick.on i{width:100%}
+  .hint .keys{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ background blueprint sketches ============ -->
+<div class="bg" id="bg">
+  <!-- L0 · the machine -->
+  <div class="sk on">
+    <svg viewBox="0 0 900 620" fill="none" stroke="#c3c8cd" stroke-width="1.1" aria-hidden="true">
+      <rect x="250" y="70" width="400" height="480" rx="6"/>
+      <rect x="272" y="94" width="356" height="90" rx="3"/>
+      <rect x="272" y="200" width="356" height="42" rx="3"/>
+      <rect x="272" y="256" width="356" height="42" rx="3"/>
+      <circle cx="600" cy="330" r="13"/><circle cx="600" cy="330" r="5"/>
+      <rect x="272" y="380" width="150" height="150" rx="3"/>
+      <path d="M292 400h110M292 420h110M292 440h70M292 460h94M292 480h56"/>
+      <path d="M450 380h178M450 404h178M450 428h140M450 452h178M450 476h96M450 500h150"/>
+      <path d="M120 70v480M120 70h40M120 550h40M780 70v480M780 70h-40M780 550h-40"/>
+      <path d="M250 600h400M250 590v20M650 590v20"/>
+    </svg>
+  </div>
+  <!-- L1 · operating system -->
+  <div class="sk">
+    <svg viewBox="0 0 900 620" fill="none" stroke="#c3c8cd" stroke-width="1.1" aria-hidden="true">
+      <rect x="90" y="70" width="720" height="150" rx="4"/>
+      <rect x="90" y="236" width="720" height="150" rx="4"/>
+      <rect x="90" y="402" width="720" height="150" rx="4"/>
+      <path d="M90 110h720M90 276h720M90 442h720"/>
+      <circle cx="118" cy="90" r="6"/><circle cx="138" cy="90" r="6"/><circle cx="158" cy="90" r="6"/>
+      <circle cx="118" cy="256" r="6"/><circle cx="138" cy="256" r="6"/><circle cx="158" cy="256" r="6"/>
+      <circle cx="118" cy="422" r="6"/><circle cx="138" cy="422" r="6"/><circle cx="158" cy="422" r="6"/>
+      <path d="M120 140h300M120 165h420M120 190h230"/>
+      <path d="M120 306h380M120 331h250M120 356h330"/>
+      <path d="M120 472h280M120 497h400M120 522h180"/>
+      <path d="M840 70v482M840 70h-20M840 552h-20"/>
+    </svg>
+  </div>
+  <!-- L2 · compiler -->
+  <div class="sk">
+    <svg viewBox="0 0 900 620" fill="none" stroke="#c3c8cd" stroke-width="1.1" aria-hidden="true">
+      <circle cx="450" cy="80" r="20"/>
+      <path d="M450 100v40M450 140h-190M450 140h190M260 140v40M640 140v40"/>
+      <circle cx="260" cy="200" r="20"/><circle cx="640" cy="200" r="20"/>
+      <path d="M260 220v40M260 260h-110M260 260h110M150 260v40M370 260v40
+               M640 220v40M640 260h-110M640 260h110M530 260v40M750 260v40"/>
+      <circle cx="150" cy="320" r="18"/><circle cx="370" cy="320" r="18"/>
+      <circle cx="530" cy="320" r="18"/><circle cx="750" cy="320" r="18"/>
+      <path d="M150 338v50M370 338v50M530 338v50M750 338v50"/>
+      <path d="M110 388h80M330 388h80M490 388h80M710 388h80"/>
+      <path d="M120 430h660M120 430v90M780 430v90M120 520h660"/>
+      <path d="M180 430v90M240 430v90M300 430v90M360 430v90M420 430v90
+               M480 430v90M540 430v90M600 430v90M660 430v90M720 430v90"/>
+    </svg>
+  </div>
+  <!-- L3 · FPGA -->
+  <div class="sk">
+    <svg viewBox="0 0 900 620" fill="none" stroke="#c3c8cd" stroke-width="1.1" aria-hidden="true">
+      <rect x="130" y="90" width="640" height="440" rx="4"/>
+      <g>
+        <rect x="180" y="140" width="90" height="70"/><rect x="310" y="140" width="90" height="70"/>
+        <rect x="440" y="140" width="90" height="70"/><rect x="570" y="140" width="90" height="70"/>
+        <rect x="180" y="260" width="90" height="70"/><rect x="310" y="260" width="90" height="70"/>
+        <rect x="440" y="260" width="90" height="70"/><rect x="570" y="260" width="90" height="70"/>
+        <rect x="180" y="380" width="90" height="70"/><rect x="310" y="380" width="90" height="70"/>
+        <rect x="440" y="380" width="90" height="70"/><rect x="570" y="380" width="90" height="70"/>
+      </g>
+      <path d="M270 175h40M400 175h40M530 175h40M270 295h40M400 295h40M530 295h40M270 415h40M400 415h40M530 415h40"/>
+      <path d="M225 210v50M355 210v50M485 210v50M615 210v50M225 330v50M355 330v50M485 330v50M615 330v50"/>
+      <path d="M130 120h-40M130 170h-40M130 220h-40M130 270h-40M130 320h-40M130 370h-40M130 420h-40M130 470h-40
+               M770 120h40M770 170h40M770 220h40M770 270h40M770 320h40M770 370h40M770 420h40M770 470h40"/>
+    </svg>
+  </div>
+  <!-- L4 · processor -->
+  <div class="sk">
+    <svg viewBox="0 0 900 620" fill="none" stroke="#c3c8cd" stroke-width="1.1" aria-hidden="true">
+      <rect x="40" y="250" width="130" height="110" rx="3"/>
+      <rect x="220" y="250" width="130" height="110" rx="3"/>
+      <rect x="400" y="120" width="140" height="90" rx="3"/>
+      <rect x="400" y="260" width="140" height="90" rx="3"/>
+      <rect x="400" y="400" width="140" height="90" rx="3"/>
+      <rect x="600" y="220" width="110" height="170" rx="3"/>
+      <rect x="760" y="250" width="110" height="110" rx="3"/>
+      <path d="M170 305h50M350 305h50M540 165h30v140h30M540 305h60M540 445h30V305h30
+               M710 305h50"/>
+      <path d="M815 250V150H285v100"/>
+      <path d="M60 380v80h760v-80"/>
+      <circle cx="440" cy="560" r="4"/><circle cx="480" cy="560" r="4"/><circle cx="520" cy="560" r="4"/>
+    </svg>
+  </div>
+  <!-- L5 · transistor / physical -->
+  <div class="sk">
+    <svg viewBox="0 0 900 620" fill="none" stroke="#c3c8cd" stroke-width="1.1" aria-hidden="true">
+      <path d="M80 430h740"/>
+      <rect x="230" y="330" width="440" height="100"/>
+      <rect x="330" y="250" width="240" height="80" rx="3"/>
+      <rect x="360" y="190" width="180" height="60" rx="3"/>
+      <path d="M230 330v-60h60v60M610 330v-60h60v60"/>
+      <path d="M120 470h660M120 470v40M780 470v40M120 510h660"/>
+      <path d="M200 510v50M300 510v50M400 510v50M500 510v50M600 510v50M700 510v50"/>
+      <path d="M450 190v-70M420 120h60"/>
+      <path d="M260 270v-90M240 180h40M640 270v-90M620 180h40"/>
+      <path d="M100 330h100M700 330h120M100 250h200M570 250h250"/>
+    </svg>
+  </div>
+</div>
+
+<!-- ============ stage ============ -->
+<div class="stage">
+
+  <header class="hud">
+    <span class="me">Krish Patel</span>
+    <span class="role">COMPUTER ENGINEER · CARNEGIE MELLON M.S. ECE</span>
+    <span class="links">
+      <a href="mailto:krishp2@andrew.cmu.edu">EMAIL</a>
+      <a href="https://github.com/krishp2">GITHUB</a>
+      <a href="https://www.linkedin.com/in/krish-patel-24bb79238/">LINKEDIN</a>
+    </span>
+  </header>
+
+  <main class="levels" id="levels">
+
+    <section class="lvl on" data-l="0">
+      <p class="tagline">SCROLL TO ZOOM IN</p>
+      <h1>Let's take a computer <em>apart</em>.</h1>
+      <p class="say">Six levels, from the machine on your desk down to a single switch a hundred nanometres across. <b>I've built something at every one of them.</b></p>
+      <div class="facts">
+        <div><b>NOW</b>M.S. ECE, Carnegie Mellon</div>
+        <div><b>BEFORE</b>B.S. CompE, Illinois</div>
+        <div><b>LOOKING FOR</b>2027 internships</div>
+      </div>
+    </section>
+
+    <section class="lvl" data-l="1">
+      <p class="tagline">LEVEL 01 · OPEN THE CASE</p>
+      <h2>First, the software that runs the whole thing</h2>
+      <p class="say">Something has to hand out memory, notice you pressed a key, and pick which program runs next. Most people never see that layer. I wrote one.</p>
+      <div class="proj">
+        <h3>An operating system, from an empty file</h3>
+        <p class="src">ECE 391 · C AND ASSEMBLY</p>
+        <p>Memory paging, an interrupt-driven keyboard driver, a working file system, and a scheduler keeping three terminals alive at once — each convinced it owns the machine.</p>
+        <div class="row"><span class="tag">C</span><span class="tag">x86 asm</span><span class="tag">QEMU</span><span class="tag">GDB</span></div>
+      </div>
+    </section>
+
+    <section class="lvl" data-l="2">
+      <p class="tagline">LEVEL 02 · THE BOARD</p>
+      <h2>Then the layer that decides how work meets hardware</h2>
+      <p class="say">A machine-learning compiler has to map a calculation onto real silicon, and there are astronomically many ways to do it. I taught one to stop looking at the bad options.</p>
+      <!-- TODO: confirm exact framing of the IBM research with Krish -->
+      <div class="proj">
+        <h3>Compiler research — shrinking the search</h3>
+        <p class="src">IBM-ILLINOIS DISCOVERY ACCELERATOR · 2024–2025</p>
+        <p>Used language-model techniques to prune a tensor compiler's autotuning search space, then rebuilt the aging pipeline on a modern framework and proved the new one agreed with the old to within two percent.</p>
+        <div class="row"><span class="tag">TVM</span><span class="tag">Python</span><span class="tag">NLP</span><span class="tag">&lt;2% variance</span></div>
+      </div>
+    </section>
+
+    <section class="lvl" data-l="3">
+      <p class="tagline">LEVEL 03 · THE CHIP, BEFORE IT'S A CHIP</p>
+      <h2>Where a design first becomes real hardware</h2>
+      <p class="say">Before anyone commits a design to silicon, it runs on an FPGA — a chip whose logic you rewire. It's the first moment your design stops being a simulation and starts being a circuit.</p>
+      <!-- TODO: replace with Krish's actual FPGA project details -->
+      <div class="proj">
+        <h3>FPGA prototyping</h3>
+        <p class="src">PLACEHOLDER — NEEDS YOUR REAL DETAILS</p>
+        <p>Synthesized an RTL design onto an FPGA, brought it up on real hardware, and closed timing against the board's constraints — catching the failures that only ever appear once a design leaves simulation.</p>
+        <div class="row"><span class="tag">SystemVerilog</span><span class="tag">Vivado</span><span class="tag">Timing constraints</span></div>
+      </div>
+    </section>
+
+    <section class="lvl" data-l="4">
+      <p class="tagline">LEVEL 04 · THE DIE · THE ONE I CARE ABOUT MOST</p>
+      <h2>The processor itself</h2>
+      <p class="say">Underneath all of it is the part that decides, billions of times a second, what to do next. I built one that refuses to wait its turn.</p>
+      <div class="proj key">
+        <span class="flag">FLAGSHIP</span>
+        <h3>A processor that runs ahead of itself</h3>
+        <p class="src">ECE 411 · SYSTEMVERILOG</p>
+        <p>When an instruction stalls, it finds later work that's ready and does that instead, then puts every result back in order before anything downstream notices. It guesses which way branches go, and unwinds a wrong guess early. Measured on CoreMark.</p>
+        <div class="row"><span class="tag">Out-of-order</span><span class="tag">Branch prediction</span><span class="tag">4-way cache</span><span class="tag">VCS · Verdi</span></div>
+      </div>
+    </section>
+
+    <section class="lvl" data-l="5">
+      <p class="tagline">LEVEL 05 · ONE SWITCH</p>
+      <h2>And at the bottom, a single transistor</h2>
+      <p class="say">A thousandth the width of a hair. Everything above is this, repeated a few billion times and arranged very carefully.</p>
+      <div class="proj">
+        <h3>Taking a datapath all the way to layout</h3>
+        <p class="src">FULL CHIP DESIGN FLOW · 2025</p>
+        <p>Carried a custom datapath from a description of what it should do, to physical cells arranged on a die, to the wires between them — then tuned it until it met timing and passed the checks that decide whether it can be manufactured.</p>
+        <div class="row"><span class="tag">Design Compiler</span><span class="tag">ICC2</span><span class="tag">PrimeTime</span><span class="tag">DRC · LVS</span></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ---- unboxing viewport ---- -->
+  <aside class="unbox">
+    <div class="cap"><span>SPECIMEN</span><b id="ubName">TOWER</b></div>
+
+    <div class="ub on"><svg viewBox="0 0 200 200" fill="none" stroke="#101208" stroke-width="1.5" aria-label="A desktop computer">
+      <rect x="58" y="18" width="84" height="164" rx="4"/>
+      <rect x="70" y="30" width="60" height="26" rx="2"/>
+      <rect x="70" y="64" width="60" height="10" rx="2"/>
+      <circle cx="126" cy="94" r="5"/>
+      <rect class="next-box" x="66" y="110" width="68" height="62" rx="2"/>
+      <path d="M58 182h84" stroke-width="2.5"/>
+    </svg></div>
+
+    <div class="ub"><svg viewBox="0 0 200 200" fill="none" stroke="#101208" stroke-width="1.5" aria-label="The case opened">
+      <rect x="44" y="24" width="76" height="152" rx="3"/>
+      <path d="M120 24l44 22v130l-44-22z"/>
+      <rect x="56" y="40" width="52" height="34" rx="2"/>
+      <path d="M56 86h52M56 98h52M56 110h34"/>
+      <rect class="next-box" x="54" y="124" width="56" height="40" rx="2"/>
+      <path d="M132 60l20 10M132 84l20 10M132 108l20 10"/>
+    </svg></div>
+
+    <div class="ub"><svg viewBox="0 0 200 200" fill="none" stroke="#101208" stroke-width="1.5" aria-label="The motherboard">
+      <rect x="26" y="34" width="148" height="132" rx="3"/>
+      <rect x="118" y="48" width="12" height="86" rx="1"/>
+      <rect x="136" y="48" width="12" height="86" rx="1"/>
+      <rect x="154" y="48" width="12" height="86" rx="1"/>
+      <rect x="40" y="146" width="80" height="10" rx="1"/>
+      <rect class="next-box" x="44" y="56" width="58" height="58" rx="2"/>
+      <circle cx="34" cy="42" r="2.5"/><circle cx="166" cy="42" r="2.5"/>
+      <circle cx="34" cy="158" r="2.5"/><circle cx="166" cy="158" r="2.5"/>
+      <path d="M44 128h58"/>
+    </svg></div>
+
+    <div class="ub"><svg viewBox="0 0 200 200" fill="none" stroke="#101208" stroke-width="1.5" aria-label="An FPGA package">
+      <rect x="40" y="40" width="120" height="120" rx="3"/>
+      <g stroke-width="1.2">
+        <path d="M40 60H22M40 80H22M40 100H22M40 120H22M40 140H22
+                 M160 60h18M160 80h18M160 100h18M160 120h18M160 140h18
+                 M60 40V22M80 40V22M100 40V22M120 40V22M140 40V22
+                 M60 160v18M80 160v18M100 160v18M120 160v18M140 160v18"/>
+      </g>
+      <g stroke-width="1">
+        <rect x="56" y="56" width="24" height="20"/><rect x="88" y="56" width="24" height="20"/><rect x="120" y="56" width="24" height="20"/>
+        <rect x="56" y="88" width="24" height="20"/><rect x="120" y="88" width="24" height="20"/>
+        <rect x="56" y="120" width="24" height="20"/><rect x="88" y="120" width="24" height="20"/><rect x="120" y="120" width="24" height="20"/>
+      </g>
+      <rect class="next-box" x="86" y="86" width="28" height="24" rx="1"/>
+    </svg></div>
+
+    <div class="ub"><svg viewBox="0 0 200 200" fill="none" stroke="#101208" stroke-width="1.5" aria-label="The die floorplan">
+      <rect x="24" y="38" width="152" height="124" rx="2"/>
+      <g stroke-width="1.1">
+        <rect x="38" y="52" width="42" height="40"/><rect x="38" y="102" width="42" height="46"/>
+        <rect x="90" y="52" width="52" height="96"/><rect x="152" y="52" width="12" height="96"/>
+      </g>
+      <path d="M80 72h10M80 124h10M142 100h10" stroke-width="1.1"/>
+      <rect class="next-box" x="98" y="66" width="26" height="24" rx="1"/>
+      <path d="M24 30h152M24 170h152" stroke-width="1"/>
+    </svg></div>
+
+    <div class="ub"><svg viewBox="0 0 200 200" fill="none" stroke="#101208" stroke-width="1.5" aria-label="A single transistor">
+      <path d="M20 140h160" stroke-width="2"/>
+      <rect x="46" y="104" width="108" height="36"/>
+      <rect x="72" y="76" width="56" height="28" rx="2"/>
+      <rect x="82" y="52" width="36" height="24" rx="2"/>
+      <path d="M46 104V86h20v18M134 104V86h20v18"/>
+      <path d="M100 52V30M88 30h24"/>
+      <path d="M56 86V64M44 64h24M144 86V64M132 64h24"/>
+      <g stroke-width="1" stroke-dasharray="3 3"><path d="M20 104h26M154 104h26"/></g>
+    </svg></div>
+  </aside>
+
+  <!-- ---- depth ruler ---- -->
+  <nav class="ruler" aria-label="Depth">
+    <div class="ruler-cap">SCALE</div>
+    <div class="ruler-in" id="ruler">
+      <div class="fill" id="fill"></div>
+      <button class="tick on" data-l="0"><i></i><span class="n">1 m</span><span class="w">MACHINE</span></button>
+      <button class="tick" data-l="1"><i></i><span class="n">40 cm</span><span class="w">SYSTEM</span></button>
+      <button class="tick" data-l="2"><i></i><span class="n">15 cm</span><span class="w">BOARD</span></button>
+      <button class="tick" data-l="3"><i></i><span class="n">5 cm</span><span class="w">FPGA</span></button>
+      <button class="tick" data-l="4"><i></i><span class="n">1 cm</span><span class="w">DIE</span></button>
+      <button class="tick" data-l="5"><i></i><span class="n">100 nm</span><span class="w">SWITCH</span></button>
+    </div>
+  </nav>
+
+  <footer class="hint">
+    <span class="wheel" aria-hidden="true"></span>
+    <span id="hintText">SCROLL TO ZOOM IN</span>
+    <span class="keys" aria-hidden="true"><kbd>↑</kbd><kbd>↓</kbd></span>
+    <span class="depth">DEPTH <b id="depthNo">0</b> / 5</span>
+  </footer>
+</div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Interactive feature: scrolling does not move the page. It changes magnification.
+// Each step scales the current level up and through the viewer while the next
+// level rises from small, so descending reads as flying into the machine.
+// ---------------------------------------------------------------------------
+const levels = [...document.querySelectorAll('.lvl')];
+const sketches = [...document.querySelectorAll('.bg .sk')];
+const boxes = [...document.querySelectorAll('.ub')];
+const ticks = [...document.querySelectorAll('.tick')];
+const fill = document.getElementById('fill');
+const depthNo = document.getElementById('depthNo');
+const ubName = document.getElementById('ubName');
+const hintText = document.getElementById('hintText');
+const LAST = levels.length - 1;
+
+let level = 0;
+let busy = false;
+
+function paint(group, i) {
+  group.forEach((el, n) => {
+    el.classList.toggle('on', n === i);
+    el.classList.toggle('past', n < i);
+  });
+}
+
+function goTo(next) {
+  next = Math.max(0, Math.min(LAST, next));
+  if (next === level) return;
+  level = next;
+
+  paint(levels, level);
+  paint(sketches, level);
+  paint(boxes, level);
+
+  ticks.forEach((t, n) => {
+    t.classList.toggle('on', n === level);
+    t.classList.toggle('past', n < level);
+  });
+
+  fill.style.height = (level / LAST) * 100 + '%';
+  depthNo.textContent = level;
+  ubName.textContent = ticks[level].querySelector('.w').textContent;
+  hintText.textContent = level === LAST ? 'SCROLL UP TO ZOOM BACK OUT' : 'SCROLL TO ZOOM IN';
+}
+
+function step(dir) {
+  if (busy) return;
+  const next = Math.max(0, Math.min(LAST, level + dir));
+  if (next === level) return;
+  busy = true;
+  goTo(next);
+  setTimeout(() => { busy = false; }, 620);
+}
+
+// --- wheel / trackpad: accumulate so one flick is one level ---
+let acc = 0;
+let settle;
+window.addEventListener('wheel', (e) => {
+  if (window.innerWidth <= 820) return; // small screens scroll normally
+  e.preventDefault();
+  if (busy) return;
+  acc += e.deltaY;
+  clearTimeout(settle);
+  settle = setTimeout(() => { acc = 0; }, 180);
+  if (Math.abs(acc) > 42) {
+    step(acc > 0 ? 1 : -1);
+    acc = 0;
+  }
+}, { passive: false });
+
+// --- keyboard ---
+window.addEventListener('keydown', (e) => {
+  const down = ['ArrowDown', 'PageDown', ' '].includes(e.key);
+  const up = ['ArrowUp', 'PageUp'].includes(e.key);
+  if (!down && !up && e.key !== 'Home' && e.key !== 'End') return;
+  e.preventDefault();
+  if (e.key === 'Home') return goTo(0);
+  if (e.key === 'End') return goTo(LAST);
+  step(down ? 1 : -1);
+});
+
+// --- touch ---
+let y0 = null;
+window.addEventListener('touchstart', (e) => { y0 = e.touches[0].clientY; }, { passive: true });
+window.addEventListener('touchend', (e) => {
+  if (y0 === null || window.innerWidth <= 820) return;
+  const dy = y0 - e.changedTouches[0].clientY;
+  if (Math.abs(dy) > 46) step(dy > 0 ? 1 : -1);
+  y0 = null;
+}, { passive: true });
+
+// --- click a scale tick to jump straight there ---
+ticks.forEach((tick) => {
+  tick.addEventListener('click', () => goTo(Number(tick.dataset.l)));
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+15-113 Project 1: Personal Portfolio Website
+Prompt Log
+
+Purpose
+Record the prompts given to AI tools while building this portfolio. This log is
+required for submission.
+
+Format
+Prompts only. Do not record AI responses, result summaries, or file diffs.
+Each entry is numbered, dated, and written as specifically as the prompt was
+actually given, including any files, constraints, or decisions it named.
+
+
+Entry 1 - September 2, 2026
+Read the Project 1 portfolio website brief and summarize the requirements.
+
+Entry 2 - September 2, 2026
+Review my existing portfolio website and use it to help create an idea for this
+course portfolio.
+
+Entry 3 - September 2, 2026
+Research hardware-engineer portfolio patterns and brainstorm an interactive,
+story-led portfolio that is not text-heavy.
+
+Entry 4 - September 2, 2026
+Build a first HTML prototype for the systems-timeline portfolio concept so we
+can review and brainstorm edits.
+
+Entry 5 - September 2, 2026
+Replace the generic card-based prototype with a simpler dark design inspired by
+my existing site, including an introductory feel and a connected project
+timeline.
+
+Entry 6 - September 2, 2026
+Recreate my current portfolio as closely as possible as a clean mockup, with
+separate HTML, CSS, and JavaScript so it can be restyled later.
+
+Entry 7 - September 2, 2026
+Suggest a more interactive, story-led project section while preserving the
+existing portfolio's simple dark style. Use proper GitHub and LinkedIn icons,
+smaller text, stronger project imagery, and a clear progression toward the
+flagship project.
+
+Entry 8 - September 2, 2026
+Make both the introduction and project section interactive.
+
+Entry 9 - September 2, 2026
+Read CLAUDE.md and AGENT.md in the portfolio folder and any scripts there to get
+the context. I have an assignment: I already have a portfolio and I need to make
+it better, with better design. Brainstorm a few designs with me, actually build
+them, and show me the HTML files so I can see how they look. Then we can discuss
+what to change.
+
+Entry 10 - September 2, 2026
+Put my last prompt into the prompt log. Remove all the responses from the log -
+we do not need them, only the prompts. Then update CLAUDE.md, AGENT.md, and
+CODEX.md to say that responses are not needed, only the prompt log, and that
+prompt entries should be kept as specific as possible.
+
+Entry 11 - September 2, 2026
+Forget about my index file. I like the pipeline design, but it is too specific to
+a hardware person. Give me some more ideas.
+Entry 12 - September 2, 2026
+I like design E, the magnification concept. Make it the real site.
+Entry 13 - September 2, 2026
+Keep it to one page instead of scrolling down. When I scroll, the animation
+should zoom in rather than move the page, transitioning to the next level of a
+computer: start with the operating system, then my compiler research, then my
+FPGA work, then my processor, then physical design at the transistor level. On
+the right, show a bar with the depth scale - 1 meter, 1 micrometer, 1 nanometer -
+and a small animation that unboxes a computer as you go down: full PC, then the
+motherboard with RAM, then the processor. In the background put a sketch of
+whatever level you are on - a sketch of a processor, a sketch of an operating
+system. Make a cool design out of it.
+Entry 14 - September 2, 2026
+Close, but a lot to change. The specimen animation is far too big - I did not
+want it that size. Put it beside the scale instead: next to each word (machine,
+system, board, FPGA, die, switch) show a tiny animation, a small easter egg
+rather than a big panel. The zoom should not jump straight to the next level; it
+should be smoother, so that rolling down zooms in slightly and continues, and if
+I pause in the middle it stays there. Maybe make the cursor a magnifying glass,
+or something like that - your call. Make the animations much smoother so it
+flows. The background looks cluttered; clean it up. Keep this as my projects
+page. The first tab should be just me: what I have done, my before and after,
+and my picture. Put a navigation bar at the top for me, about, projects, and
+contact.
+Entry 15 - September 2, 2026
+I like it somewhat, but I do not like the zoom background. It should be a
+sensible zoom that animates from one thing into another - I am zooming into
+something like a computer, and the background should show me what is inside it.
+Entry 16 - September 2, 2026
+I like how you are taking the computer apart, but make the background bolder so
+I can actually see it. Add a dark mode toggle at the top. There is too much text
+- "let's take a computer apart" is good enough, keep the rest brief. Highlight
+my projects more so people understand what each one is about. The FPGA level has
+two projects: the HFT trading one and the game one - highlight both, and let me
+click into them for more detail. Pull the details from my resume in the Downloads
+folder or from my website krish-patel.com. Clicking a project should open its
+details. Keep the zoom, but make it a little snappier - I can stop in the middle,
+but it should snap slightly when I reach a level.
+Entry 17 - September 3, 2026
+This looks good, a few changes. The snap is annoying because it fires a moment
+after I stop - it should only snap once I have actually zoomed into that point,
+and then I should have to zoom slightly further to break back out of it. Make it
+a very light snap, not the hard one it has now. Also highlight my project names
+instead of leaving them white - use red, or another colour that works.
+Entry 18 - September 3, 2026
+Make it better: one scroll down should move one level, not several. But if I am
+scrolling slowly it should not feel like there is too much resistance. Fast
+scroll moves one level; slow scroll should stay free.
+Entry 19 - September 3, 2026
+Instead of "I build the layer where software becomes signal", just show my name:
+"Hi, this is Krish", a short blurb, and my picture. Put the UIUC and Carnegie
+Mellon logos near the name. When I scroll down on the Me page it should take me
+straight to Projects. Rename About to Resume and move it after Projects, and have
+it show my resume in a sleek way plus the PDF to download. Resume file:
+"/Users/apple/Desktop/Work/final resume/hardware/Krish_patel_resume.pdf".
+Entry 20 - September 3, 2026
+There is a glitch, fix it. Also the logos are not showing - put in the Illinois
+and Carnegie Mellon logos.
+Entry 21 - September 3, 2026
+My main concern is the zoom - the transitions are abrupt, it just happens rather
+than feeling like I am zooming into something. Make it smoother and more
+immersive, so going from Me to Projects feels like travelling somewhere. Make it
+more responsive and easier to scroll and zoom. Improve the animation, and make
+the monitor a bit smaller. Also tighten the text: instead of "I build processors"
+use something less cliche, like working in hardware architecture and design, and
+do not describe that project as my most recent one, because it is not.
+Entry 22 - September 3, 2026
+Look at https://www.krish-patel.com/os - I have the operating system embedded on
+that page. Embed it in our site too. Instead of "read more" on that project, just
+say "try it", and clicking it should open the embedded page so people can try the
+OS. Add a back button to return to the projects section.
+Entry 23 - September 3, 2026
+There are images and videos for most of the projects on my site - pull those
+details in too and keep everything concise. I like the current animation style,
+but iterate on how each level looks: give the design system more thought. Show
+units like drivers, and for the FPGA level show an actual FPGA board that you
+then zoom into the chip on. Make it make more sense.
+Entry 24 - September 3, 2026
+One more thing: I like the smoothness, but clicking the magnifying glass on the
+red square should zoom into it as well, so that is covered too. Also go through
+the text and make it less arrogant and more direct. The claim about the
+out-of-order core being my most recent project is wrong - remove it from the
+first page.
+
+Project notes (not prompts)
+- Portfolio domain: krish-patel.com. Connect this custom domain after the
+  GitHub Pages site is deployed.

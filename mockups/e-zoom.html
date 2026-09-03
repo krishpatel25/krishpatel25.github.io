@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Krish Patel — Magnification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --stage:#f7f7f5; --slide:#ffffff; --ink:#11130f; --mid:#5e6358; --dim:#9a9e93;
+  --rule:#d6d8cf; --hair:#e7e8e2; --red:#d92d20; --red-soft:rgba(217,45,32,.09);
+  --w:1080px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--stage);color:var(--ink);
+  font-family:Barlow,system-ui,sans-serif;font-size:15.5px;line-height:1.66;
+  -webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.cnd{font-family:"Barlow Condensed",system-ui,sans-serif}
+.mn{font-family:"JetBrains Mono",monospace}
+.wrap{width:min(var(--w),calc(100% - 40px));margin-inline:auto}
+
+/* ---------- magnification bar ---------- */
+.scope{position:sticky;top:0;z-index:40;background:rgba(247,247,245,.94);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--ink)}
+.scope-in{width:min(var(--w),calc(100% - 40px));margin-inline:auto;
+  display:grid;grid-template-columns:auto 1fr auto;gap:26px;align-items:center;padding:10px 0 12px}
+.who{font-family:"Barlow Condensed",sans-serif;font-size:19px;font-weight:600;
+  letter-spacing:.01em;white-space:nowrap}
+.mag{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;
+  color:var(--mid);text-align:right;white-space:nowrap}
+.mag b{display:block;font-family:"Barlow Condensed",sans-serif;font-size:21px;
+  color:var(--red);letter-spacing:.02em;font-weight:600;line-height:1}
+/* the ruler */
+.ruler{position:relative;height:40px}
+.ticks{position:absolute;inset:auto 0 10px;height:22px;display:grid;grid-template-columns:repeat(5,1fr)}
+.ticks button{background:none;border:0;padding:0;font:inherit;cursor:pointer;position:relative;
+  color:var(--dim);transition:color .25s}
+.ticks button:hover{color:var(--mid)}
+.ticks button::before{content:"";position:absolute;left:50%;bottom:0;width:1px;height:9px;background:var(--rule)}
+.ticks button span{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;
+  font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.09em;white-space:nowrap}
+.ticks button.on{color:var(--ink)}
+.ticks button.on::before{background:var(--red);height:13px}
+.ruler::after{content:"";position:absolute;left:0;right:0;bottom:10px;border-bottom:1px solid var(--rule)}
+/* the reticle that slides */
+.reticle{position:absolute;bottom:2px;width:20%;height:30px;pointer-events:none;
+  transition:transform .55s cubic-bezier(.55,.05,.2,1)}
+.reticle i{position:absolute;inset:0;border:1px solid var(--red);background:var(--red-soft)}
+.reticle i::before,.reticle i::after{content:"";position:absolute;background:var(--red)}
+.reticle i::before{left:50%;top:-5px;bottom:-5px;width:1px}
+.reticle i::after{top:50%;left:-5px;right:-5px;height:1px}
+
+/* ---------- stops ---------- */
+.stop{padding:104px 0;border-bottom:1px solid var(--hair);scroll-margin-top:70px}
+.stop-head{display:grid;grid-template-columns:150px 1fr;gap:34px;align-items:start}
+.scale-tag{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.16em;color:var(--red)}
+.scale-tag b{display:block;font-family:"Barlow Condensed",sans-serif;font-size:44px;
+  color:var(--ink);line-height:.9;letter-spacing:-.01em;margin-bottom:5px;font-weight:600}
+.stop h2{font-family:"Barlow Condensed",sans-serif;font-size:clamp(30px,4.2vw,46px);
+  line-height:1.03;letter-spacing:-.005em;margin:0 0 14px;max-width:17ch;font-weight:600;text-wrap:balance}
+.stop .seen{color:var(--mid);max-width:56ch;margin:0;font-size:16.5px}
+
+/* hero */
+.hero{padding:80px 0 90px;display:grid;grid-template-columns:1fr 210px;gap:56px;align-items:end}
+.hero h1{font-family:"Barlow Condensed",sans-serif;font-size:clamp(46px,7vw,84px);line-height:.94;
+  letter-spacing:-.015em;margin:0 0 22px;max-width:13ch;font-weight:700;text-wrap:balance}
+.hero h1 em{font-style:normal;color:var(--red)}
+.hero p{color:var(--mid);max-width:52ch;font-size:17px;margin:0 0 14px}
+.hero p b{color:var(--ink);font-weight:600}
+.hero img{width:210px;aspect-ratio:3/4;object-fit:cover;object-position:50% 20%;
+  filter:grayscale(1) contrast(1.06);border:1px solid var(--ink)}
+.startline{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;
+  color:var(--dim);margin-top:26px;display:flex;align-items:center;gap:10px}
+.startline::after{content:"";flex:1;border-top:1px dashed var(--rule)}
+
+/* specimen */
+.spec{margin-top:40px;display:grid;grid-template-columns:1fr 330px;gap:44px;align-items:start;
+  padding-top:30px;border-top:1px solid var(--ink)}
+.spec h3{font-family:"Barlow Condensed",sans-serif;font-size:25px;margin:0 0 3px;font-weight:600;letter-spacing:.002em}
+.spec .src{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.15em;color:var(--red);margin:0 0 15px}
+.spec p{margin:0 0 18px;color:#33372e;max-width:56ch}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--mid);
+  border:1px solid var(--rule);background:var(--slide);padding:3px 8px}
+.slide-card{border:1px solid var(--ink);background:var(--slide)}
+.slide-card figure{margin:0;padding:16px 14px;border-bottom:1px solid var(--rule)}
+.slide-card svg{display:block;width:100%;height:auto}
+.slide-card dl{margin:0;display:grid;grid-template-columns:1fr 1fr}
+.slide-card>dl>div{padding:11px 13px;border-bottom:1px solid var(--hair)}
+.slide-card>dl>div:nth-child(odd){border-right:1px solid var(--hair)}
+.slide-card dt{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.13em;color:var(--dim);margin-bottom:3px}
+.slide-card dd{margin:0;font-family:"Barlow Condensed",sans-serif;font-size:17px;font-weight:600}
+.slide-card dd.red{color:var(--red)}
+
+/* flagship */
+.flag .spec{border-top:2px solid var(--red)}
+.flag .badge{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:9.5px;
+  letter-spacing:.18em;color:var(--slide);background:var(--red);padding:4px 10px;margin-bottom:13px}
+
+/* contact */
+.out{padding:96px 0 40px}
+.out h2{font-family:"Barlow Condensed",sans-serif;font-size:clamp(34px,5vw,54px);
+  margin:0 0 12px;letter-spacing:-.008em;font-weight:600;max-width:18ch;text-wrap:balance}
+.out>p{color:var(--mid);max-width:48ch;margin:0 0 32px;font-size:17px}
+.pins{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--ink);background:var(--slide)}
+.pins a{padding:20px 18px;border-right:1px solid var(--rule);transition:background .2s}
+.pins a:last-child{border-right:0}
+.pins a:hover{background:var(--red-soft)}
+.pins b{display:block;font-family:"JetBrains Mono",monospace;font-size:9.5px;
+  letter-spacing:.16em;color:var(--dim);font-weight:400}
+.pins span{display:block;font-family:"Barlow Condensed",sans-serif;font-size:21px;
+  font-weight:600;margin:6px 0 2px}
+.pins em{font-style:normal;font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--mid)}
+.foot{padding:24px 0 46px;display:flex;justify-content:space-between;
+  font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--dim);letter-spacing:.13em}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+@media (max-width:820px){
+  .scope-in{grid-template-columns:1fr auto;gap:12px}
+  .ruler{grid-column:1/-1;order:3}
+  .ticks button span{font-size:8.5px}
+  .hero{grid-template-columns:1fr;gap:28px;padding:52px 0 60px}
+  .hero img{width:160px;order:-1}
+  .stop{padding:64px 0}
+  .stop-head{grid-template-columns:1fr;gap:12px}
+  .scale-tag b{font-size:36px}
+  .spec{grid-template-columns:1fr;gap:26px}
+  .pins{grid-template-columns:1fr}
+  .pins a{border-right:0;border-bottom:1px solid var(--rule)}
+}
+</style>
+</head>
+<body>
+
+<div class="scope">
+  <div class="scope-in">
+    <div class="who">Krish Patel</div>
+    <div class="ruler">
+      <div class="reticle" id="reticle"><i></i></div>
+      <div class="ticks" id="ticks">
+        <button class="on" data-t="s0"><span>1 m</span></button>
+        <button data-t="s1"><span>10 cm</span></button>
+        <button data-t="s2"><span>1 cm</span></button>
+        <button data-t="s3"><span>100 µm</span></button>
+        <button data-t="s4"><span>100 nm</span></button>
+      </div>
+    </div>
+    <div class="mag">FIELD OF VIEW<b id="mag">1 m</b></div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section class="hero">
+    <div>
+      <h1>Every problem I like looks different <em>up close</em>.</h1>
+      <p>I'm a computer engineer. This page starts at arm's length — a machine doing a job — and magnifies until you're looking at a single transistor. <b>Each step down is a project I built.</b></p>
+      <p>Scroll to zoom in.</p>
+      <div class="startline">CARNEGIE MELLON · M.S. ECE &nbsp;/&nbsp; ILLINOIS · B.S. COMPE</div>
+    </div>
+    <img src="https://static.wixstatic.com/media/843f1e_69efc195f84f4fa6b0341ea2a1d163ef~mv2.jpg/v1/crop/x_611,y_0,w_1133,h_1640/fill/w_560,h_810,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/krish_patel_edited.jpg" alt="Krish Patel" />
+  </section>
+
+  <section class="stop" id="s0">
+    <div class="stop-head">
+      <div class="scale-tag"><b>1 m</b>ARM'S LENGTH</div>
+      <div>
+        <h2>A machine, doing something worth doing</h2>
+        <p class="seen">At this distance you can't see any engineering at all — just a computer training a model. But the shape of that job reaches all the way down and changes every decision below it, so it's the right place to start.</p>
+      </div>
+    </div>
+    <div class="spec">
+      <div>
+        <h3>Teaching a compiler to search smarter</h3>
+        <p class="src">IBM-ILLINOIS DISCOVERY ACCELERATOR · 2024–2025</p>
+        <p>A compiler for machine learning has to decide how to map a calculation onto real hardware, and there are astronomically many ways to do it. I used language-model techniques to throw out the bad options early, then rebuilt the whole aging pipeline on a modern framework and proved the new one agreed with the old to within two percent.</p>
+        <div class="tags"><span class="tag">TVM</span><span class="tag">Python</span><span class="tag">NLP</span><span class="tag">Autotuning</span></div>
+      </div>
+      <div class="slide-card">
+        <figure>
+          <svg viewBox="0 0 320 92" role="img" aria-label="A large search space reduced to a small one">
+            <rect x="12" y="14" width="118" height="64" fill="#f2e3e1" stroke="#d92d20" stroke-width=".8"/>
+            <rect x="210" y="36" width="44" height="20" fill="#d92d20"/>
+            <path d="M142 46h52" stroke="#11130f" stroke-width="1"/><path d="M190 42l7 4-7 4z" fill="#11130f"/>
+            <g font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle">
+              <text x="71" y="49" fill="#11130f">EVERY OPTION</text><text x="232" y="49" fill="#fff">KEPT</text>
+              <text x="286" y="49" fill="#5e6358">±2%</text>
+            </g>
+          </svg>
+        </figure>
+        <dl>
+          <div><dt>FRAMEWORK</dt><dd>TVM</dd></div>
+          <div><dt>AGREEMENT</dt><dd class="red">&lt; 2%</dd></div>
+          <div><dt>METHOD</dt><dd>NLP pruning</dd></div>
+          <div><dt>LENGTH</dt><dd>12 months</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop" id="s1">
+    <div class="stop-head">
+      <div class="scale-tag"><b>10 cm</b>THE BOARD</div>
+      <div>
+        <h2>Closer in: the software that shares the machine out</h2>
+        <p class="seen">Zoom in and you find the operating system — the layer that hands out memory, listens to the keyboard, and decides which program gets to run next. Everyone uses one. Far fewer people have written one.</p>
+      </div>
+    </div>
+    <div class="spec">
+      <div>
+        <h3>An operating system, from an empty file</h3>
+        <p class="src">ECE 391 · 2024</p>
+        <p>Memory paging, an interrupt-driven keyboard driver, a working file system, and a scheduler that keeps three terminals running at once — each one convinced it has the whole machine to itself. Written in C and assembly, debugged one breakpoint at a time.</p>
+        <div class="tags"><span class="tag">C</span><span class="tag">x86 Assembly</span><span class="tag">QEMU</span><span class="tag">GDB</span></div>
+      </div>
+      <div class="slide-card">
+        <figure>
+          <svg viewBox="0 0 320 92" role="img" aria-label="Three terminals above one kernel">
+            <g stroke="#d6d8cf" stroke-width="1" fill="none">
+              <rect x="26" y="10" width="268" height="18"/><rect x="26" y="28" width="268" height="18"/><rect x="26" y="46" width="268" height="18"/>
+            </g>
+            <rect x="26" y="64" width="268" height="20" fill="#f2e3e1" stroke="#d92d20" stroke-width=".8"/>
+            <g font-family="JetBrains Mono, monospace" font-size="8" fill="#11130f">
+              <text x="36" y="23">TERMINAL 3</text><text x="36" y="41">TERMINAL 2</text><text x="36" y="59">TERMINAL 1</text>
+              <text x="36" y="78" fill="#d92d20">KERNEL — decides who runs next</text>
+            </g>
+          </svg>
+        </figure>
+        <dl>
+          <div><dt>TERMINALS</dt><dd class="red">3 at once</dd></div>
+          <div><dt>SCHEDULER</dt><dd>Round-robin</dd></div>
+          <div><dt>MEMORY</dt><dd>Paged</dd></div>
+          <div><dt>LANGUAGE</dt><dd>C + asm</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop flag" id="s2">
+    <div class="stop-head">
+      <div class="scale-tag"><b>1 cm</b>THE CHIP</div>
+      <div>
+        <h2>Here it is — the thing I actually build</h2>
+        <p class="seen">At one centimetre you are looking at the processor itself: the part that decides, billions of times a second, what to do next. I designed one that refuses to wait its turn.</p>
+      </div>
+    </div>
+    <div class="spec">
+      <div>
+        <span class="badge">FLAGSHIP PROJECT</span>
+        <h3>A processor that runs ahead of itself</h3>
+        <p class="src">ECE 411 · SYSTEMVERILOG</p>
+        <p>Most processors do one thing at a time, in order, and stall whenever something isn't ready. This one looks further down the list, finds work it <em>can</em> do, does that instead, and quietly puts the results back in the right order before anything downstream notices. It also guesses which way each decision will go — and when it guesses wrong, it unwinds the mistake early instead of paying full price. Measured against CoreMark and a hand-written test suite.</p>
+        <div class="tags"><span class="tag">SystemVerilog</span><span class="tag">VCS</span><span class="tag">Verdi</span><span class="tag">Verilator</span><span class="tag">CoreMark</span></div>
+      </div>
+      <div class="slide-card">
+        <figure>
+          <svg viewBox="0 0 320 112" role="img" aria-label="Work done out of order then put back in order">
+            <defs><marker id="e1" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0 0l6 3-6 3z" fill="#d92d20"/></marker></defs>
+            <g fill="none" stroke="#c9ccc2" stroke-width="1">
+              <rect x="8" y="42" width="54" height="28" rx="2"/>
+              <rect x="100" y="8" width="62" height="24" rx="2"/><rect x="100" y="44" width="62" height="24" rx="2"/><rect x="100" y="80" width="62" height="24" rx="2"/>
+              <rect x="262" y="42" width="50" height="28" rx="2"/>
+            </g>
+            <rect x="196" y="32" width="42" height="48" rx="2" fill="#f2e3e1" stroke="#d92d20" stroke-width=".9"/>
+            <g stroke="#d92d20" stroke-width="1" marker-end="url(#e1)" opacity=".9">
+              <path d="M62 56h32"/><path d="M162 20h18v34h8"/><path d="M162 56h26"/><path d="M162 92h18V58h8"/><path d="M238 56h16"/>
+            </g>
+            <g font-family="JetBrains Mono, monospace" font-size="7.5" fill="#11130f" text-anchor="middle">
+              <text x="35" y="59">READ IN</text>
+              <text x="131" y="23">TASK A</text><text x="131" y="59">TASK B</text><text x="131" y="95">TASK C</text>
+              <text x="217" y="59" fill="#d92d20">REORDER</text><text x="287" y="59">IN ORDER</text>
+            </g>
+            <text x="131" y="110" font-family="JetBrains Mono, monospace" font-size="7" fill="#9a9e93" text-anchor="middle">whichever is ready first, not first in line</text>
+          </svg>
+        </figure>
+        <dl>
+          <div><dt>EXECUTES</dt><dd class="red">Out of order</dd></div>
+          <div><dt>PREDICTS</dt><dd>Branches</dd></div>
+          <div><dt>CACHE</dt><dd>4-way</dd></div>
+          <div><dt>PROVEN ON</dt><dd>CoreMark</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="spec" style="border-top:1px solid var(--hair);margin-top:36px">
+      <div>
+        <h3>And then I taught it</h3>
+        <p class="src">TEACHING ASSISTANT · ECE 411 · SPRING 2025</p>
+        <p>A semester spent walking student teams through building their own processors: reading their code, arguing about how to prove a design correct, and explaining the same subtle failure ten different ways until one of them landed.</p>
+        <div class="tags"><span class="tag">Mentoring</span><span class="tag">Verification</span><span class="tag">Debugging</span></div>
+      </div>
+      <div></div>
+    </div>
+  </section>
+
+  <section class="stop" id="s3">
+    <div class="stop-head">
+      <div class="scale-tag"><b>100 µm</b>THE FLOORPLAN</div>
+      <div>
+        <h2>Closer still, and the design becomes real estate</h2>
+        <p class="seen">A tenth of a millimetre across, the logic stops being an idea and becomes an arrangement — blocks that have to physically fit, and wires whose length costs you time you cannot get back.</p>
+      </div>
+    </div>
+    <div class="spec">
+      <div>
+        <h3>Taking a design all the way to layout</h3>
+        <p class="src">FULL CHIP DESIGN FLOW · 2025</p>
+        <p>I carried a custom datapath through every stage of the flow: from a description of what it should do, to the arrangement of physical cells on a die, to the wires connecting them — then tuned it until it ran fast enough and passed the checks that decide whether a design can actually be manufactured.</p>
+        <div class="tags"><span class="tag">Design Compiler</span><span class="tag">ICC2</span><span class="tag">PrimeTime</span><span class="tag">DRC / LVS</span></div>
+      </div>
+      <div class="slide-card">
+        <figure>
+          <svg viewBox="0 0 320 92" role="img" aria-label="Blocks arranged on a die">
+            <rect x="8" y="8" width="304" height="76" fill="none" stroke="#c9ccc2"/>
+            <g fill="#f2e3e1" stroke="#d92d20" stroke-width=".8">
+              <rect x="22" y="20" width="66" height="24"/><rect x="22" y="50" width="66" height="22"/>
+              <rect x="98" y="20" width="86" height="52"/><rect x="194" y="20" width="52" height="52"/>
+              <rect x="256" y="20" width="44" height="24"/><rect x="256" y="50" width="44" height="22"/>
+            </g>
+            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#11130f" text-anchor="middle">
+              <text x="55" y="35">MATH</text><text x="55" y="64">SHIFT</text><text x="141" y="49">REGISTERS</text>
+              <text x="220" y="49">CONTROL</text><text x="278" y="35">MUX</text><text x="278" y="64">I/O</text>
+            </g>
+          </svg>
+        </figure>
+        <dl>
+          <div><dt>FLOW</dt><dd class="red">Design → layout</dd></div>
+          <div><dt>TIMING</dt><dd>Closed</dd></div>
+          <div><dt>CHECKS</dt><dd>DRC · LVS</dd></div>
+          <div><dt>ANALYSIS</dt><dd>Power</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop" id="s4">
+    <div class="stop-head">
+      <div class="scale-tag"><b>100 nm</b>THE SWITCH</div>
+      <div>
+        <h2>And at the bottom, one switch turning on</h2>
+        <p class="seen">A thousandth the width of a hair. Everything above — the model, the operating system, the processor, the floorplan — is this, repeated a few billion times and arranged very carefully. That's the part I find hard to get over.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="out">
+    <h2>Now let's zoom back out. Want to work together?</h2>
+    <p>I'm looking for 2027 internships in computer architecture, verification, and hardware for AI.</p>
+    <div class="pins">
+      <a href="mailto:krishp2@andrew.cmu.edu"><b>EMAIL</b><span>Get in touch</span><em>krishp2@andrew.cmu.edu</em></a>
+      <a href="https://github.com/krishp2"><b>CODE</b><span>GitHub</span><em>github.com/krishp2</em></a>
+      <a href="https://www.linkedin.com/in/krish-patel-24bb79238/"><b>NETWORK</b><span>LinkedIn</span><em>in/krish-patel</em></a>
+    </div>
+    <div class="foot"><span>© 2026 KRISH PATEL</span><span>HAND-CODED</span></div>
+  </section>
+</main>
+
+<script>
+// Interactive feature: a magnification ruler. The reticle slides to the scale you are
+// reading as you scroll, the field-of-view readout updates, and clicking a tick zooms there.
+const ticks = [...document.querySelectorAll('#ticks button')];
+const stops = ticks.map((t) => document.getElementById(t.dataset.t));
+const reticle = document.getElementById('reticle');
+const mag = document.getElementById('mag');
+
+ticks.forEach((tick) => {
+  tick.addEventListener('click', () => {
+    document.getElementById(tick.dataset.t).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+function focusOn(i) {
+  reticle.style.transform = 'translateX(' + (i * 100) + '%)';
+  ticks.forEach((t, n) => t.classList.toggle('on', n === i));
+  mag.textContent = ticks[i].querySelector('span').textContent;
+}
+
+let at = -1;
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    const i = stops.indexOf(entry.target);
+    if (i !== -1 && i !== at) { at = i; focusOn(i); }
+  });
+}, { rootMargin: '-38% 0px -55% 0px', threshold: 0 });
+
+stops.forEach((s) => io.observe(s));
+focusOn(0);
+</script>
+</body>
+</html>
