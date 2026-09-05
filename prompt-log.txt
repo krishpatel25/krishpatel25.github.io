@@ -143,6 +143,17 @@ red square should zoom into it as well, so that is covered too. Also go through
 the text and make it less arrogant and more direct. The claim about the
 out-of-order core being my most recent project is wrong - remove it from the
 first page.
+Entry 25 - September 3, 2026
+A few changes. Organise the code properly - separate CSS, HTML and JavaScript,
+factored and categorised the way a senior engineer would. Use the correct UIUC
+logo from the image I sent and put it in assets. On the site: when I open the
+391 OS project, take all the details of how the OS runs from my site and put
+them there, behind the try-it button. Replace the small pop-ups with proper
+pages carrying all the details, the images and videos. Make the out-of-order
+core visuals neater - read the pipeline image and draw your own version, get the
+proper benchmarks, add more detail. Do not sound like AI, sound human. On
+contact, remove "email is fastest" and just say I am looking for 2027
+internships. Then push it.
 
 Project notes (not prompts)
 - Portfolio domain: krish-patel.com. Connect this custom domain after the

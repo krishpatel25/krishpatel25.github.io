@@ -1,0 +1,68 @@
+/* ==========================================================================
+   Top bar: brand, page tabs, theme switch
+   ========================================================================== */
+
+.nav {
+  position: fixed; inset: 0 0 auto 0;
+  height: var(--nav);
+  z-index: 80;
+  background: color-mix(in srgb, var(--stage) 92%, transparent);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--ink);
+}
+.nav__inner {
+  height: 100%;
+  width: min(var(--wide), calc(100% - 56px));
+  margin-inline: auto;
+  display: flex; align-items: center; gap: 18px;
+}
+.nav__brand { font-family: var(--face-display); font-size: 22px; font-weight: 700; }
+.nav__brand small {
+  display: block;
+  font-family: var(--face-mono);
+  font-size: 8px;
+  letter-spacing: .2em;
+  color: var(--mid);
+  font-weight: 400;
+  margin-top: -2px;
+}
+.nav__tabs { margin-left: auto; display: flex; gap: 2px; }
+.nav__tab {
+  padding: 7px 15px;
+  font-size: 13.5px;
+  color: var(--mid);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: color .22s, background .22s, border-color .22s;
+}
+.nav__tab:hover { color: var(--ink); }
+.nav__tab.is-on { color: var(--stage); background: var(--ink); border-color: var(--ink); }
+
+.theme-switch {
+  width: 34px; height: 34px;
+  display: grid; place-items: center;
+  cursor: pointer;
+  border: 1px solid var(--rule);
+  margin-left: 8px;
+  transition: border-color .22s, color .22s;
+}
+.theme-switch:hover { border-color: var(--red); color: var(--red); }
+.theme-switch svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+.theme-switch .moon { display: none; }
+:root[data-theme="dark"] .theme-switch .sun { display: none; }
+:root[data-theme="dark"] .theme-switch .moon { display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-switch .sun { display: none; }
+  :root:not([data-theme="light"]) .theme-switch .moon { display: block; }
+}
+
+/* ---- page shell ---- */
+.page { display: none; }
+.page.is-on { display: block; }
+.page--scroll { padding: calc(var(--nav) + 74px) 0 90px; }
+
+@media (max-width: 900px) {
+  .nav__inner { width: calc(100% - 32px); }
+  .nav__tab { padding: 6px 9px; font-size: 12px; }
+  .nav__brand small { display: none; }
+}

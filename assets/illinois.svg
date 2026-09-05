@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"
+     role="img" aria-label="University of Illinois Urbana-Champaign">
+  <title>University of Illinois Urbana-Champaign</title>
+  <rect width="100" height="100" fill="#13294B"/>
+  <path d="M20 13 H80 V32 H64.5 V68 H80 V87 H20 V68 H35.5 V32 H20 Z"
+        fill="#E84A27" stroke="#FFFFFF" stroke-width="5" stroke-linejoin="miter"/>
+</svg>
