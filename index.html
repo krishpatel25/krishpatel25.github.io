@@ -31,7 +31,8 @@
 </head>
 <body>
 
-<nav class="nav">
+<a class="skip" href="#main">Skip to content</a>
+<nav class="nav" aria-label="Primary">
   <div class="nav__inner">
     <div class="nav__brand">Krish Patel<small>COMPUTER ENGINEER</small></div>
     <div class="nav__tabs">
@@ -47,8 +48,10 @@
   </div>
 </nav>
 
+<main id="main">
+
 <!-- ============================ ME ============================ -->
-<section class="page home" data-page="home">
+<section class="page home is-on" data-page="home">
   <div class="home__inner">
     <div>
       <p class="eyebrow">COMPUTER ENGINEER</p>
@@ -71,7 +74,7 @@
 </section>
 
 <!-- ========================= PROJECTS ========================= -->
-<section class="page" data-page="projects">
+<section class="page" data-page="projects" aria-label="Projects, by scale">
   <div class="zoom" id="zoom">
     <div class="scene-holder">
       <svg class="scene" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -443,6 +446,13 @@
     </div>
   </div>
 </section>
+
+</main>
+
+<footer class="site-foot">
+  <span>&copy; 2026 Krish Patel</span>
+  <span>Hand-coded &middot; <a href="https://github.com/krishpatel25/krishpatel25.github.io">source on GitHub</a></span>
+</footer>
 
 <!-- ======================== LIVE DEMO ======================== -->
 <div class="demo" id="demo" hidden>
