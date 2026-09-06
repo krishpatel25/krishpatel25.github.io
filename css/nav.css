@@ -75,15 +75,3 @@
 }
 .skip:focus { left: 8px; top: 8px; }
 
-.site-foot {
-  border-top: 1px solid var(--rule);
-  padding: 22px 0 30px;
-  width: min(var(--page), calc(100% - 56px));
-  margin-inline: auto;
-  display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
-  font-family: var(--face-mono); font-size: 10px; letter-spacing: .12em;
-  color: var(--dim);
-}
-.site-foot a:hover { color: var(--red); }
-/* the stage is fixed to the viewport, so the footer has no place on it */
-body:has(.page[data-page="projects"].is-on) .site-foot { display: none; }

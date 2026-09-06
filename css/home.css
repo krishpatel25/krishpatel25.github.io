@@ -117,3 +117,20 @@
   .entry__when { margin-left: 0; width: 100%; }
   .skill { grid-template-columns: 1fr; gap: 5px; }
 }
+
+/* ---- colophon: quiet by design, and only on contact ---- */
+.colophon {
+  margin: 56px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--hair);
+  display: flex; flex-wrap: wrap; gap: 22px;
+  font-family: var(--face-mono);
+  font-size: 9.5px;
+  letter-spacing: .14em;
+  color: var(--dim);
+  opacity: .62;
+  transition: opacity .3s;
+}
+.colophon:hover { opacity: 1; }
+.colophon a { border-bottom: 1px solid transparent; transition: border-color .2s, color .2s; }
+.colophon a:hover { color: var(--mid); border-bottom-color: currentColor; }
