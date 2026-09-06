@@ -118,19 +118,23 @@
   .skill { grid-template-columns: 1fr; gap: 5px; }
 }
 
-/* ---- colophon: quiet by design, and only on contact ---- */
+/* ---- colophon ----
+   Deliberately recessive: it sits well below the contact block, at the very
+   end of the page, and should register only if you go looking for it. -------- */
 .colophon {
-  margin: 56px 0 0;
-  padding-top: 18px;
+  margin: 120px 0 0;
+  padding-top: 16px;
   border-top: 1px solid var(--hair);
-  display: flex; flex-wrap: wrap; gap: 22px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
   font-family: var(--face-mono);
-  font-size: 9.5px;
-  letter-spacing: .14em;
+  font-size: 9px;
+  letter-spacing: .16em;
+  line-height: 1.7;
   color: var(--dim);
-  opacity: .62;
-  transition: opacity .3s;
+  opacity: .45;
+  transition: opacity .35s;
 }
-.colophon:hover { opacity: 1; }
-.colophon a { border-bottom: 1px solid transparent; transition: border-color .2s, color .2s; }
-.colophon a:hover { color: var(--mid); border-bottom-color: currentColor; }
+.colophon:hover { opacity: .85; }
+.colophon i { font-style: normal; opacity: .5; }
+.colophon a { color: inherit; border-bottom: 1px solid transparent; transition: border-color .2s; }
+.colophon a:hover { border-bottom-color: currentColor; }
